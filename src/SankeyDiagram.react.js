@@ -1,33 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 
-const translate = (
-  nodes,
-  edges,
-  setLabels,
-  setSources,
-  setTargets,
-  setValues
-) => {
-  var labels = [];
+/**
+ * Translate Nodes and Edges to a format readable by the Plotly diagram. Also sets the values
+ */
+const translate = (nodes, edges) => {
   var idToIndex = {};
+  var labels = [];
+  var sources = [];
+  var targets = [];
+  var values = [];
   nodes.map((element, index) => {
     labels.push(element.label);
     idToIndex[element.id] = index;
   });
-  setLabels(labels);
-
-  var sources = [];
-  var targets = [];
-  var values = [];
   edges.map((element) => {
     sources.push(idToIndex[element.sourceId]);
     targets.push(idToIndex[element.targetId]);
     values.push(5);
   });
-  setSources(sources);
-  setTargets(targets);
-  setValues(values);
+  return [labels, sources, targets, values];
 };
 
 export default (props) => {
@@ -35,16 +27,18 @@ export default (props) => {
   const [sources, setSources] = useState([]);
   const [targets, setTargets] = useState([]);
   const [values, setValues] = useState([]);
+
   useEffect(() => {
-    translate(
+    const [newLabels, newSources, newTargets, newValues] = translate(
       props.nodes,
-      props.edges,
-      setLabels,
-      setSources,
-      setTargets,
-      setValues
+      props.edges
     );
+    setLabels(newLabels);
+    setSources(newSources);
+    setTargets(newTargets);
+    setValues(newValues);
   }, [props.nodes, props.edges]);
+
   return (
     <Plot
       data={[
