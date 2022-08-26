@@ -1,0 +1,14 @@
+{
+  "201": {
+    "sourceId": 101,
+    "targetId": 102,
+    "isPercentage": true,
+    "amount": 0.5
+  },
+  "202": {
+    "sourceId": 101,
+    "targetId": 103,
+    "isPercentage": true,
+    "amount": 0.5
+  }
+}

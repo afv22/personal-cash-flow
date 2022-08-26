@@ -1,0 +1,17 @@
+{
+  "101": {
+    "label": "Node1",
+    "userID": 1,
+    "initialValue": 10
+  },
+  "102": {
+    "label": "Node2",
+    "userID": 1,
+    "initialValue": 0
+  },
+  "103": {
+    "label": "Node3",
+    "userID": 1,
+    "initialValue": 0
+  }
+}
