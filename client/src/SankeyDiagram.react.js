@@ -17,7 +17,8 @@ const translate = (nodes, edges) => {
   edges.map((element) => {
     sources.push(idToIndex[element.sourceId]);
     targets.push(idToIndex[element.targetId]);
-    values.push(5);
+    console.log(element.getValue());
+    values.push(element.getValue());
   });
   return [labels, sources, targets, values];
 };

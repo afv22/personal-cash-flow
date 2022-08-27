@@ -4,12 +4,20 @@ class Node {
     this.label = label;
     this.userID = userID;
     this.initialValue = initialValue;
+    this.incomingEdges = [];
+    this.outgoingEdges = [];
+  }
+
+  getValue() {
+    return (
+      this.initialValue + this.incomingEdges.map((edge) => edge.getValue())
+    );
   }
 }
 
 class Edge {
   /**
-   * Initializes an instance of an Edge
+   * Initializes an Edge
    * @param id: Int - The Edge ID
    * @param sourceId: Int - The source account
    * @param targetId: Int - The destination account
@@ -34,6 +42,15 @@ class Edge {
       this.amount = amount;
     }
     this.isTaxable = isTaxable;
+  }
+
+  getValue() {
+    if (this.isPercentage) {
+      // Need to fetch the source Node's value
+      return this.amount * 100;
+    } else {
+      return this.amount;
+    }
   }
 }
 
