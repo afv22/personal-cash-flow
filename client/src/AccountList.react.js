@@ -8,6 +8,8 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Grid,
+  Typography,
+  Divider,
 } from "@mui/material";
 import Icon from "@mui/icons-material/BlurOn";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,14 +27,25 @@ const DELETE_NODE = gql`
 `;
 
 export default ({ nodes, getDataQuery }) => {
-  const [deleteNode, { loading, data }] = useMutation(DELETE_NODE, {
+  const [deleteNode, { loading, error }] = useMutation(DELETE_NODE, {
     refetchQueries: [{ query: getDataQuery }, "GetData"],
   });
   const handleDelete = (nodeID) => {
     deleteNode({ variables: { nodeID: nodeID } });
   };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  } else if (error) {
+    return <p>Error!</p>;
+  }
+
   return (
     <Grid sx={[{ width: "300px" }]}>
+      <Typography variant="h4" align="center">
+        Accounts
+      </Typography>
+      <Divider />
       <List>
         {nodes.map((node) => (
           <ListItem key={node.id}>

@@ -37,7 +37,7 @@ export default (props) => {
     setSources(newSources);
     setTargets(newTargets);
     setValues(newValues);
-  }, [props.nodes, props.edges]);
+  }, [props.data]);
 
   return (
     <Plot

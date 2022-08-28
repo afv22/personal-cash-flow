@@ -2,7 +2,7 @@ import React from "react";
 import SankeyDiagram from "./SankeyDiagram.react";
 import AccountList from "./AccountList.react";
 import { gql, useQuery } from "@apollo/client";
-import { Divider, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 const GET_DATA = gql`
   query GetData {
@@ -25,8 +25,6 @@ export default (props) => {
   } else if (error) {
     return <p>Error!</p>;
   }
-
-  console.log(data);
 
   return (
     <Grid container direction="column" alignItems="center">
