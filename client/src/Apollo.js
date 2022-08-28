@@ -1,4 +1,10 @@
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloProvider,
+  gql,
+  InMemoryCache,
+  useQuery,
+} from "@apollo/client";
 
 const InitializeApolloClient = () => {
   return new ApolloClient({
@@ -7,4 +13,21 @@ const InitializeApolloClient = () => {
   });
 };
 
-export { ApolloProvider, InitializeApolloClient };
+const QueryData = () => {
+  const GET_DATA = gql`
+    query GetData {
+      allNodes {
+        id
+        name
+      }
+      allEdges {
+        id
+        sourceId
+        targetId
+      }
+    }
+  `;
+  return useQuery(GET_DATA);
+};
+
+export { ApolloProvider, InitializeApolloClient, QueryData };

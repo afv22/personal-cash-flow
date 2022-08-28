@@ -1,28 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SankeyDiagram from "./SankeyDiagram.react";
-import { fetchEdges, fetchNodes } from "./data/Storage";
-import { useQuery, gql } from "@apollo/client";
+import { QueryData } from "./Apollo";
+import { Grid } from "@mui/material";
 
 export default (props) => {
-  const GET_DATA = gql`
-    query GetData {
-      allNodes {
-        id
-        name
-      }
-      allEdges {
-        id
-        sourceId
-        targetId
-      }
-    }
-  `;
-  const { loading, error, data } = useQuery(GET_DATA);
+  const { loading, error, data } = QueryData();
   if (loading) {
     return <p>Loading...</p>;
   } else if (error) {
     return <p>Error!</p>;
-  } else {
-    return <SankeyDiagram data={data} />;
   }
+
+  return (
+    <Grid container direction="column" alignItems="center">
+      <SankeyDiagram data={data} />
+    </Grid>
+  );
 };
