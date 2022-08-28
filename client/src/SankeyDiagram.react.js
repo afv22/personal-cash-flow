@@ -10,15 +10,14 @@ const translate = (nodes, edges) => {
   var sources = [];
   var targets = [];
   var values = [];
-  nodes.map((element, index) => {
-    labels.push(element.label);
-    idToIndex[element.id] = index;
+  nodes.map((node, index) => {
+    labels.push(node.name);
+    idToIndex[node.id] = index;
   });
-  edges.map((element) => {
-    sources.push(idToIndex[element.sourceId]);
-    targets.push(idToIndex[element.targetId]);
-    console.log(element.getValue());
-    values.push(element.getValue());
+  edges.map((edge) => {
+    sources.push(idToIndex[edge.sourceId]);
+    targets.push(idToIndex[edge.targetId]);
+    values.push(5);
   });
   return [labels, sources, targets, values];
 };
@@ -31,8 +30,8 @@ export default (props) => {
 
   useEffect(() => {
     const [newLabels, newSources, newTargets, newValues] = translate(
-      props.nodes,
-      props.edges
+      props.data.allNodes,
+      props.data.allEdges
     );
     setLabels(newLabels);
     setSources(newSources);
