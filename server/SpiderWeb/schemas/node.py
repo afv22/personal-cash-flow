@@ -1,6 +1,6 @@
-from uuid import uuid4
 import graphene
 from graphene_django import DjangoObjectType
+from ..helpers import generateID
 
 from ..models import Node
 
@@ -17,12 +17,12 @@ class NodeCreate(graphene.Mutation):
     class Arguments:
         data = NodeInput(required=True)
     
-    object = graphene.Field(NodeType)
+    node = graphene.Field(NodeType)
 
     @staticmethod
     def mutate(root, info, data=None):
         node_instance = Node(
-            id=uuid4(),
+            id=generateID(),
             name=data.name
         )
         node_instance.save()

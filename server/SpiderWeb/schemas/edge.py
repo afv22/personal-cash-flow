@@ -1,6 +1,6 @@
-from uuid import uuid4
 import graphene
 from graphene_django import DjangoObjectType
+from ..helpers import generateID
 
 from ..models import Edge
 
@@ -18,12 +18,12 @@ class EdgeCreate(graphene.Mutation):
     class Arguments:
         data = EdgeInput(required=True)
     
-    object = graphene.Field(EdgeType)
+    edge = graphene.Field(EdgeType)
 
     @staticmethod
     def mutate(root, info, data=None):
         instance = Edge(
-            id=uuid4(),
+            id=generateID(),
             sourceId=data.sourceId,
             targetId=data.targetId,
         )
@@ -35,7 +35,7 @@ class EdgeUpdate(graphene.Mutation):
         id = graphene.ID()
         data = EdgeInput(required=True)
 
-    object = graphene.Field(EdgeType)
+    edge = graphene.Field(EdgeType)
 
     @staticmethod
     def mutate(root, info, id, data=None):
@@ -54,7 +54,7 @@ class EdgeDelete(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
     
-    object = graphene.Field(EdgeType)
+    edge = graphene.Field(EdgeType)
 
     @staticmethod
     def mutate(root, info, id):
