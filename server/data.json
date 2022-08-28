@@ -1,0 +1,39 @@
+[
+  {
+    "model": "SpiderWeb.Node",
+    "pk": 101,
+    "fields": {
+      "name": "Jeff"
+    }
+  },
+  {
+    "model": "SpiderWeb.Node",
+    "pk": 102,
+    "fields": {
+      "name": "Mark"
+    }
+  },
+  {
+    "model": "SpiderWeb.Node",
+    "pk": 103,
+    "fields": {
+      "name": "Craig"
+    }
+  },
+  {
+    "model": "SpiderWeb.Edge",
+    "pk": 201,
+    "fields": {
+      "sourceId": 101,
+      "targetId": 102
+    }
+  },
+  {
+    "model": "SpiderWeb.Edge",
+    "pk": 202,
+    "fields": {
+      "sourceId": 101,
+      "targetId": 103
+    }
+  }
+]
