@@ -38,8 +38,7 @@ class Query(graphene.ObjectType):
     edges_from_target_id = graphene.List(EdgeType, target_id=graphene.Int())
     def resolve_edges_from_target_id(self, info, target_id):
         return Edge.objects.filter(targetId=target_id)
-
-
+    
 class Mutation(graphene.ObjectType):
     create_node = NodeCreate.Field()
     update_node = NodeUpdate.Field()

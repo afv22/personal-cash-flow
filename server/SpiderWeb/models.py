@@ -1,3 +1,4 @@
+from pydoc import ispackage
 from django.db import models
 
 
@@ -7,6 +8,12 @@ class Node(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
     initialValue = models.FloatField(default=1.0)
+
+    def calculateValue(self) -> float:
+        return self.initialValue + sum([edge.calculateThroughValue() for edge in self.getIncomingEdges()])
+
+    def getIncomingEdges(self):
+        return Edge.objects.filter(targetId=self.id)
 
     def __str__(self) -> str:
         return self.name
@@ -20,3 +27,10 @@ class Edge(models.Model):
 
     def __str__(self) -> str:
         return self.id
+    
+    def calculateThroughValue(self) -> float:
+        sourceNode = Node.objects.get(pk=self.sourceId)
+        if self.isPercentage:
+            return sourceNode.calculateValue() * self.amount
+        else:
+            return min(self.amount, sourceNode.calculateValue())

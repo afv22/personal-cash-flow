@@ -9,6 +9,10 @@ class NodeType(DjangoObjectType):
     class Meta:
         model = Node
         fields = "__all__"
+    
+    value = graphene.Float(required=True, node_id=graphene.ID())
+    def resolve_value(self, info):
+        return Node.objects.get(pk=self.id).calculateValue()
 
 class NodeInput(graphene.InputObjectType):
     name = graphene.String()

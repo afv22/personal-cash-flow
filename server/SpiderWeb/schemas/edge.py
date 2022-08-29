@@ -10,6 +10,10 @@ class EdgeType(DjangoObjectType):
         model = Edge
         fields = "__all__"
 
+    value = graphene.Float()
+    def resolve_value(self, info):
+        return Edge.objects.get(pk=self.id).calculateThroughValue()
+
 class EdgeInput(graphene.InputObjectType):
     sourceId = graphene.ID()
     targetId = graphene.ID()
