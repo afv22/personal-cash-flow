@@ -13,10 +13,7 @@ class Query(graphene.ObjectType):
     
     nodes = graphene.List(NodeType, node_ids=graphene.List(graphene.Int))
     def resolve_nodes(self, info, node_ids):
-        print(node_ids)
-        test = [Node.objects.get(pk=node_id) for node_id in node_ids]
-        print(test)
-        return test
+        return [Node.objects.get(pk=node_id) for node_id in node_ids]
     
     node = graphene.Field(NodeType, node_id=graphene.Int())
     def resolve_node(self, info, node_id):

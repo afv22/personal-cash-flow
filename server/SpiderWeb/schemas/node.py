@@ -12,6 +12,7 @@ class NodeType(DjangoObjectType):
 
 class NodeInput(graphene.InputObjectType):
     name = graphene.String()
+    initialValue = graphene.Float()
 
 class NodeCreate(graphene.Mutation):
     class Arguments:
@@ -23,7 +24,8 @@ class NodeCreate(graphene.Mutation):
     def mutate(root, info, data=None):
         node_instance = Node(
             id=generateID(),
-            name=data.name
+            name=data.name,
+            initialValue=data.initialValue,
         )
         node_instance.save()
         return NodeCreate(node=node_instance)
@@ -42,6 +44,7 @@ class NodeUpdate(graphene.Mutation):
 
         if node_instance:
             node_instance.name = node_data.name
+            node_instance.initialValue = node_data.initialValue
             node_instance.save()
 
             return NodeUpdate(node=node_instance)

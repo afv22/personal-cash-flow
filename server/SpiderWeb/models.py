@@ -6,6 +6,7 @@ class Node(models.Model):
     # The var name must match the column name in the database
     id = models.PositiveBigIntegerField(primary_key=True)
     name = models.CharField(max_length=100)
+    initialValue = models.FloatField(default=1.0)
 
     def __str__(self) -> str:
         return self.name
