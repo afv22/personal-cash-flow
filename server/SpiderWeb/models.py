@@ -15,6 +15,8 @@ class Edge(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
+    isPercentage = models.BooleanField(default=False)
+    amount = models.FloatField(default=0)
 
     def __str__(self) -> str:
         return self.id

@@ -13,6 +13,8 @@ class EdgeType(DjangoObjectType):
 class EdgeInput(graphene.InputObjectType):
     sourceId = graphene.ID()
     targetId = graphene.ID()
+    isPercentage = graphene.Boolean()
+    amount = graphene.Float()
 
 class EdgeCreate(graphene.Mutation):
     class Arguments:
@@ -26,6 +28,8 @@ class EdgeCreate(graphene.Mutation):
             id=generateID(),
             sourceId=data.sourceId,
             targetId=data.targetId,
+            isPercentage=data.isPercentage,
+            amount=data.amount,
         )
         instance.save()
         return EdgeCreate(edge=instance)
@@ -45,6 +49,8 @@ class EdgeUpdate(graphene.Mutation):
         if instance:
             instance.sourceId = data.sourceId
             instance.targetId = data.targetId
+            instance.isPercentage = data.isPercentage
+            instance.amount = data.amount
             instance.save()
 
             return EdgeUpdate(edge=instance)
