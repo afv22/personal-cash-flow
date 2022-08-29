@@ -19,7 +19,7 @@ const GET_DATA = gql`
   }
 `;
 
-export default (props) => {
+export default ({}) => {
   const { loading, error, data } = useQuery(GET_DATA);
   if (loading) {
     return <p>Loading...</p>;
@@ -30,9 +30,13 @@ export default (props) => {
   return (
     <Grid container direction="column" alignItems="center">
       <SankeyDiagram data={data} />
-      <Grid container justifyContent="center">
-        <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
-        <EdgeList edges={data.allEdges} getDataQuery={GET_DATA} />
+      <Grid container justifyContent="center" spacing={12}>
+        <Grid item>
+          <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
+        </Grid>
+        <Grid item>
+          <EdgeList edges={data.allEdges} getDataQuery={GET_DATA} />
+        </Grid>
       </Grid>
     </Grid>
   );
