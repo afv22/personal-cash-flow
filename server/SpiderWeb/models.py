@@ -9,11 +9,17 @@ class Node(models.Model):
     name = models.CharField(max_length=100)
     initialValue = models.FloatField(default=1.0)
 
-    def calculateValue(self) -> float:
+    def calculateGrossValue(self) -> float:
         return self.initialValue + sum([edge.calculateThroughValue() for edge in self.getIncomingEdges()])
+    
+    def calculateNetValue(self) -> float:
+        return self.calculateGrossValue() - sum([edge.calculateThroughValue() for edge in self.getOutgoingEdges()])
 
     def getIncomingEdges(self):
         return Edge.objects.filter(targetId=self.id)
+
+    def getOutgoingEdges(self):
+        return Edge.objects.filter(sourceId=self.id)
 
     def __str__(self) -> str:
         return self.name
@@ -31,6 +37,6 @@ class Edge(models.Model):
     def calculateThroughValue(self) -> float:
         sourceNode = Node.objects.get(pk=self.sourceId)
         if self.isPercentage:
-            return sourceNode.calculateValue() * self.amount
+            return sourceNode.calculateGrossValue() * self.amount
         else:
-            return min(self.amount, sourceNode.calculateValue())
+            return self.amount

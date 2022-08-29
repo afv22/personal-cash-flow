@@ -10,9 +10,13 @@ class NodeType(DjangoObjectType):
         model = Node
         fields = "__all__"
     
-    value = graphene.Float(required=True, node_id=graphene.ID())
-    def resolve_value(self, info):
-        return Node.objects.get(pk=self.id).calculateValue()
+    gross_value = graphene.Float(required=True, node_id=graphene.ID())
+    def resolve_gross_value(self, info):
+        return Node.objects.get(pk=self.id).calculateGrossValue()
+    
+    net_value = graphene.Float(required=True, node_id=graphene.ID())
+    def resolve_net_value(self, info):
+        return Node.objects.get(pk=self.id).calculateNetValue()
 
 class NodeInput(graphene.InputObjectType):
     name = graphene.String()
