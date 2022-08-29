@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Icon from "@mui/icons-material/BlurOn";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import CreateNodeForm from "./CreateNodeForm.react";
 
 const DELETE_NODE = gql`
@@ -30,6 +30,7 @@ export default ({ nodes, getDataQuery }) => {
   const [deleteNode, { loading, error }] = useMutation(DELETE_NODE, {
     refetchQueries: [{ query: getDataQuery }, "GetData"],
   });
+
   const handleDelete = (nodeID) => {
     deleteNode({ variables: { nodeID: nodeID } });
   };
@@ -47,19 +48,19 @@ export default ({ nodes, getDataQuery }) => {
       </Typography>
       <Divider />
       <List>
-        {nodes.map((node) => (
-          <ListItem key={node.id}>
+        {nodes.map((account) => (
+          <ListItem key={account.id}>
             <ListItemAvatar>
               <Avatar>
                 <Icon />
               </Avatar>
             </ListItemAvatar>
-            <ListItemText primary={node.name} />
+            <ListItemText primary={account.name} />
             <ListItemSecondaryAction>
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={() => handleDelete(node.id)}
+                onClick={() => handleDelete(account.id)}
               >
                 <DeleteIcon />
               </IconButton>

@@ -22,7 +22,7 @@ const translate = (nodes, edges) => {
   return [labels, sources, targets, values];
 };
 
-export default (props) => {
+export default ({ data }) => {
   const [labels, setLabels] = useState([]);
   const [sources, setSources] = useState([]);
   const [targets, setTargets] = useState([]);
@@ -30,14 +30,14 @@ export default (props) => {
 
   useEffect(() => {
     const [newLabels, newSources, newTargets, newValues] = translate(
-      props.data.allNodes,
-      props.data.allEdges
+      data.allNodes,
+      data.allEdges
     );
     setLabels(newLabels);
     setSources(newSources);
     setTargets(newTargets);
     setValues(newValues);
-  }, [props.data]);
+  }, [data]);
 
   return (
     <Plot

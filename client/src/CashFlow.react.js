@@ -3,6 +3,7 @@ import SankeyDiagram from "./SankeyDiagram.react";
 import AccountList from "./AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid } from "@mui/material";
+import EdgeList from "./EdgeList";
 
 const GET_DATA = gql`
   query GetData {
@@ -29,7 +30,10 @@ export default (props) => {
   return (
     <Grid container direction="column" alignItems="center">
       <SankeyDiagram data={data} />
-      <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
+      <Grid container justifyContent="center">
+        <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
+        <EdgeList edges={data.allEdges} getDataQuery={GET_DATA} />
+      </Grid>
     </Grid>
   );
 };

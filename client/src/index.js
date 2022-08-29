@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import CashFlow from "./CashFlow.react";
-import { ApolloProvider, InitializeApolloClient } from "./Apollo";
+import { ApolloProvider } from "@apollo/client";
+import InitializeApolloClient from "./Apollo";
 
 const client = InitializeApolloClient();
 
