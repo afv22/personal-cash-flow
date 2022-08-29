@@ -90,8 +90,12 @@ export default ({ edges, getDataQuery }) => {
               style={{ display: "flex", justifyContent: "flex-end" }}
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete" onClick={() => {}}>
-                <DeleteIcon onClick={() => handleDelete(edge.id)} />
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => handleDelete(edge.id)}
+              >
+                <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>

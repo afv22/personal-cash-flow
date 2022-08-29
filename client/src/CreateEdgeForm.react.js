@@ -22,8 +22,8 @@ const CREATE_EDGE_FORM_CREATE_EDGE = gql`
 `;
 
 export default ({ getDataQuery }) => {
-  const [source, setSource] = useState(0);
-  const [target, setTarget] = useState(0);
+  const [source, setSource] = useState("");
+  const [target, setTarget] = useState("");
 
   const getAccountNamesResponse = useQuery(CREATE_EDGE_FORM_GET_ACCOUNT_NAMES);
   const [createEdge, _] = useMutation(CREATE_EDGE_FORM_CREATE_EDGE, {
@@ -31,19 +31,19 @@ export default ({ getDataQuery }) => {
   });
 
   const handleSubmit = () => {
-    if (source == 0 || target == 0) {
+    if (source == "" || target == "") {
       return;
     }
     createEdge({ variables: { sourceID: source, targetID: target } });
-    setSource(0);
-    setTarget(0);
+    setSource("");
+    setTarget("");
   };
 
   if (getAccountNamesResponse.loading) {
     return;
   }
-  const accounts = getAccountNamesResponse.data.allNodes;
 
+  const accounts = getAccountNamesResponse.data.allNodes;
   return (
     <Grid container direction="column" alignItems="center" spacing={1}>
       <Grid container direction="row" spacing={3} justifyContent="center">
