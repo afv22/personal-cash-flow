@@ -1,23 +1,29 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
+import { gql, useQuery } from "@apollo/client";
 
 /**
- * Translate Nodes and Edges to a format readable by the Plotly diagram. Also sets the values
+ * Translate Nodes and Edges to a format readable by the Plotly diagram
  */
 const translate = (nodes, edges) => {
   var idToIndex = {};
-  var labels = [];
+  var labels = ["Total Income"];
   var sources = [];
   var targets = [];
   var values = [];
   nodes.map((node, index) => {
     labels.push(node.name);
-    idToIndex[node.id] = index;
+    idToIndex[node.id] = index + 1;
+    if (node.initialValue > 0) {
+      sources.push(0);
+      targets.push(index + 1);
+      values.push(node.initialValue);
+    }
   });
   edges.map((edge) => {
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
-    values.push(5);
+    values.push(edge.value);
   });
   return [labels, sources, targets, values];
 };

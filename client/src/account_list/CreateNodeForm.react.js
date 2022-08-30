@@ -3,11 +3,10 @@ import { Box, Button, Grid, TextField } from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
 
 const CREATE_NODE = gql`
-  mutation CreateNode($name: String!) {
-    createNode(data: { name: $name }) {
+  mutation CreateNode($name: String!, $initialValue: Float!) {
+    createNode(data: { name: $name, initialValue: $initialValue }) {
       node {
         id
-        name
       }
     }
   }
@@ -15,15 +14,19 @@ const CREATE_NODE = gql`
 
 export default ({ getDataQuery }) => {
   const [name, setName] = useState("");
-  const [createNode, { loading, data }] = useMutation(CREATE_NODE, {
+  const [initialValue, setInitialValue] = useState("");
+  const [createNode, _] = useMutation(CREATE_NODE, {
     refetchQueries: [{ query: getDataQuery }, "GetData"],
   });
   const handleSubmit = () => {
-    if (name == "") {
+    if (name == "" || initialValue == "") {
       return;
     }
-    createNode({ variables: { name: name } });
+    createNode({
+      variables: { name: name, initialValue: parseFloat(initialValue) },
+    });
     setName("");
+    setInitialValue("");
   };
 
   return (
@@ -35,6 +38,15 @@ export default ({ getDataQuery }) => {
           variant="outlined"
           onChange={(event) => setName(event.target.value)}
           value={name}
+        />
+      </Grid>
+      <Grid item>
+        <TextField
+          id="create-node-name-input"
+          label="Initial Value"
+          variant="outlined"
+          onChange={(event) => setInitialValue(event.target.value)}
+          value={initialValue}
         />
       </Grid>
       <Grid item>

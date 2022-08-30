@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Grid, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 const CREATE_EDGE_FORM_GET_ACCOUNT_NAMES = gql`
@@ -12,8 +20,20 @@ const CREATE_EDGE_FORM_GET_ACCOUNT_NAMES = gql`
 `;
 
 const CREATE_EDGE_FORM_CREATE_EDGE = gql`
-  mutation CreateEdgeFormCreateEdge($sourceID: ID!, $targetID: ID!) {
-    createEdge(data: { sourceId: $sourceID, targetId: $targetID }) {
+  mutation CreateEdgeFormCreateEdge(
+    $sourceID: ID!
+    $targetID: ID!
+    $isPercentage: Boolean!
+    $amount: Float!
+  ) {
+    createEdge(
+      data: {
+        sourceId: $sourceID
+        targetId: $targetID
+        isPercentage: $isPercentage
+        amount: $amount
+      }
+    ) {
       edge {
         id
       }
@@ -24,6 +44,8 @@ const CREATE_EDGE_FORM_CREATE_EDGE = gql`
 export default ({ getDataQuery }) => {
   const [source, setSource] = useState("");
   const [target, setTarget] = useState("");
+  const [isPercentage, setIsPercentage] = useState(false);
+  const [amount, setAmount] = useState("");
 
   const getAccountNamesResponse = useQuery(CREATE_EDGE_FORM_GET_ACCOUNT_NAMES);
   const [createEdge, _] = useMutation(CREATE_EDGE_FORM_CREATE_EDGE, {
@@ -34,9 +56,18 @@ export default ({ getDataQuery }) => {
     if (source == "" || target == "") {
       return;
     }
-    createEdge({ variables: { sourceID: source, targetID: target } });
+    createEdge({
+      variables: {
+        sourceID: source,
+        targetID: target,
+        isPercentage: isPercentage,
+        amount: amount,
+      },
+    });
     setSource("");
     setTarget("");
+    setIsPercentage(false);
+    setAmount("");
   };
 
   if (getAccountNamesResponse.loading) {
@@ -49,7 +80,7 @@ export default ({ getDataQuery }) => {
       <Grid container direction="row" spacing={3} justifyContent="center">
         <Grid item>
           <Select
-            style={{ minWidth: 160 }}
+            style={{ width: 160 }}
             labelId="create-edge-select-source-label"
             id="create-edge-select-source"
             value={source}
@@ -65,7 +96,7 @@ export default ({ getDataQuery }) => {
         </Grid>
         <Grid item>
           <Select
-            style={{ minWidth: 160 }}
+            style={{ width: 160 }}
             labelId="create-edge-select-target-label"
             id="create-edge-select-target"
             value={target}
@@ -80,6 +111,27 @@ export default ({ getDataQuery }) => {
               </MenuItem>
             ))}
           </Select>
+        </Grid>
+        <Grid item>
+          <FormControlLabel
+            control={
+              <Checkbox
+                value={isPercentage}
+                onChange={() => setIsPercentage(!isPercentage)}
+              />
+            }
+            label="Percentage"
+          />
+        </Grid>
+        <Grid item>
+          <TextField
+            style={{ width: 160 }}
+            id="create-edge-amount-input"
+            label="Amount"
+            variant="outlined"
+            onChange={(event) => setAmount(event.target.value)}
+            value={amount}
+          />
         </Grid>
       </Grid>
       <Grid item>

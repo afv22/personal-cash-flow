@@ -1,20 +1,25 @@
 import React from "react";
 import SankeyDiagram from "./SankeyDiagram.react";
-import AccountList from "./AccountList.react";
+import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid } from "@mui/material";
-import EdgeList from "./EdgeList";
+import EdgeList from "./edge_list/EdgeList";
 
 const GET_DATA = gql`
   query GetData {
     allNodes {
       id
       name
+      initialValue
+      netValue
     }
     allEdges {
       id
       sourceId
       targetId
+      isPercentage
+      amount
+      value
     }
   }
 `;
