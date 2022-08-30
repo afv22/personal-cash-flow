@@ -19,11 +19,14 @@ export default ({ getDataQuery }) => {
     refetchQueries: [{ query: getDataQuery }, "GetData"],
   });
   const handleSubmit = () => {
-    if (name == "" || initialValue == "") {
+    if (name == "") {
       return;
     }
     createNode({
-      variables: { name: name, initialValue: parseFloat(initialValue) },
+      variables: {
+        name: name,
+        initialValue: parseFloat(initialValue != "" ? initialValue : 0),
+      },
     });
     setName("");
     setInitialValue("");

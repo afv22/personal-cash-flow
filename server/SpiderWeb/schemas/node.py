@@ -1,9 +1,7 @@
 import graphene
 from graphene_django import DjangoObjectType
 from ..helpers import generateID
-
 from ..models import Node
-
 
 class NodeType(DjangoObjectType):
     class Meta:
@@ -58,7 +56,6 @@ class NodeUpdate(graphene.Mutation):
             return NodeUpdate(node=node_instance)
         return NodeUpdate(node=None)
 
-
 class NodeDelete(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
@@ -68,5 +65,9 @@ class NodeDelete(graphene.Mutation):
     @staticmethod
     def mutate(root, info, id):
         node_instance = Node.objects.get(pk=id)
+        for edge in list(node_instance.getIncomingEdges()):
+            edge.delete()
+        for edge in list(node_instance.getOutgoingEdges()):
+            edge.delete()
         node_instance.delete()
         return None

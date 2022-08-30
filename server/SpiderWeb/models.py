@@ -1,4 +1,3 @@
-from pydoc import ispackage
 from django.db import models
 
 
