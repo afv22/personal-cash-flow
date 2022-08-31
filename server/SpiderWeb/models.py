@@ -9,10 +9,25 @@ class Node(models.Model):
     initialValue = models.FloatField(default=1.0)
 
     def calculateGrossValue(self) -> float:
-        return self.initialValue + sum([edge.calculateThroughValue() for edge in self.getIncomingEdges()])
-    
+        return self.initialValue + sum(
+            [edge.calculateThroughValue() for edge in self.getIncomingEdges()]
+        )
+
     def calculateNetValue(self) -> float:
-        return self.calculateGrossValue() - sum([edge.calculateThroughValue() for edge in self.getOutgoingEdges()])
+        outgoingValue = sum(
+            [edge.calculateThroughValue() for edge in self.getOutgoingEdges()]
+        )
+        return self.calculateGrossValue() - outgoingValue
+
+    def calculateRemainingBalanceForEdge(self, remaining_edge):
+        outgoingValue = sum(
+            [
+                edge.calculateThroughValue()
+                for edge in self.getOutgoingEdges()
+                if edge.id != remaining_edge.id
+            ]
+        )
+        return self.calculateGrossValue() - outgoingValue
 
     def getIncomingEdges(self):
         return Edge.objects.filter(targetId=self.id)
@@ -23,19 +38,24 @@ class Node(models.Model):
     def __str__(self) -> str:
         return self.name
 
+
 class Edge(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
-    isPercentage = models.BooleanField(default=False)
-    amount = models.FloatField(default=0)
+    # Only one of these should be set at any given time. Each represents
+    # an option for how much of the source balance should be piped through
+    sourcePercentage = models.FloatField(default=0)
+    sourceAmount = models.FloatField(default=0)
+    sourceRemainingBalance = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return self.id
-    
+
     def calculateThroughValue(self) -> float:
         sourceNode = Node.objects.get(pk=self.sourceId)
-        if self.isPercentage:
-            return sourceNode.calculateGrossValue() * self.amount
-        else:
-            return self.amount
+        if self.sourcePercentage:
+            return sourceNode.calculateGrossValue() * self.sourcePercentage / 100
+        elif self.sourceAmount:
+            return self.sourceAmount
+        return sourceNode.calculateRemainingBalanceForEdge(self)
