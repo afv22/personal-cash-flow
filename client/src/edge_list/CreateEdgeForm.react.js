@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  MenuItem,
-  Select,
-  TextField,
-} from "@mui/material";
+import { Button, Grid, MenuItem, Select, TextField } from "@mui/material";
 import { gql, useMutation, useQuery } from "@apollo/client";
 
 const CREATE_EDGE_FORM_GET_ACCOUNT_NAMES = gql`
@@ -90,7 +82,6 @@ export default ({ getDataQuery }) => {
             labelId="create-edge-select-source-label"
             id="create-edge-select-source"
             value={source}
-            label="Source"
             onChange={(event) => setSource(event.target.value)}
           >
             {accounts.map((num) => (
@@ -106,7 +97,6 @@ export default ({ getDataQuery }) => {
             labelId="create-edge-select-target-label"
             id="create-edge-select-target"
             value={target}
-            label="Target"
             onChange={(event) => {
               setTarget(event.target.value);
             }}

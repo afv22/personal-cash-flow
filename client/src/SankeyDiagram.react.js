@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
-import { gql, useQuery } from "@apollo/client";
 
 /**
  * Translate Nodes and Edges to a format readable by the Plotly diagram
@@ -21,7 +20,6 @@ const translate = (nodes, edges) => {
     }
   });
   edges.map((edge) => {
-    console.log(edge.value);
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
     values.push(edge.value);
@@ -50,6 +48,7 @@ export default ({ data }) => {
     <Plot
       data={[
         {
+          arrangement: "snap",
           type: "sankey",
           orientation: "h",
           node: {
