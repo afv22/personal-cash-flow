@@ -21,6 +21,7 @@ const translate = (nodes, edges) => {
     }
   });
   edges.map((edge) => {
+    console.log(edge.value);
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
     values.push(edge.value);

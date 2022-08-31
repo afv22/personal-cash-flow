@@ -23,6 +23,15 @@ export default ({ edge, sourceName, targetName, getDataQuery }) => {
     deleteEdge({ variables: { edgeID: edgeID } });
   };
 
+  var value;
+  if (edge.sourcePercentage) {
+    value = edge.sourcePercentage + "%";
+  } else if (edge.sourceAmount) {
+    value = formatUSD(edge.sourceAmount);
+  } else {
+    value = "Balance";
+  }
+
   return (
     <Card key={edge.id}>
       <Grid container direction="column" columnSpacing={6}>
@@ -46,11 +55,7 @@ export default ({ edge, sourceName, targetName, getDataQuery }) => {
       </Grid>
       <Grid container direction="row" justifyContent="space-evenly">
         <Grid item>
-          <Typography variant="subtitle1">
-            {edge.isPercentage
-              ? edge.amount * 100 + "%"
-              : formatUSD(edge.amount)}
-          </Typography>
+          <Typography variant="subtitle1">{value}</Typography>
         </Grid>
         <Grid item>
           <IconButton onClick={() => handleDelete(edge.id)}>

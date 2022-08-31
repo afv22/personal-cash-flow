@@ -23,15 +23,17 @@ const CREATE_EDGE_FORM_CREATE_EDGE = gql`
   mutation CreateEdgeFormCreateEdge(
     $sourceID: ID!
     $targetID: ID!
-    $isPercentage: Boolean!
-    $amount: Float!
+    $sourcePercentage: Float!
+    $sourceAmount: Float!
+    $sourceRemainingBalance: Boolean!
   ) {
     createEdge(
       data: {
         sourceId: $sourceID
         targetId: $targetID
-        isPercentage: $isPercentage
-        amount: $amount
+        sourcePercentage: $sourcePercentage
+        sourceAmount: $sourceAmount
+        sourceRemainingBalance: $sourceRemainingBalance
       }
     ) {
       edge {
@@ -44,8 +46,10 @@ const CREATE_EDGE_FORM_CREATE_EDGE = gql`
 export default ({ getDataQuery }) => {
   const [source, setSource] = useState("");
   const [target, setTarget] = useState("");
-  const [isPercentage, setIsPercentage] = useState(false);
-  const [amount, setAmount] = useState("");
+  const [edgeType, setEdgeType] = useState(0);
+  const [edgeValue, setEdgeValue] = useState("");
+
+  const edgeTypes = ["Percentage", "Amount", "Remaining Balance"];
 
   const getAccountNamesResponse = useQuery(CREATE_EDGE_FORM_GET_ACCOUNT_NAMES);
   const [createEdge, _] = useMutation(CREATE_EDGE_FORM_CREATE_EDGE, {
@@ -56,18 +60,20 @@ export default ({ getDataQuery }) => {
     if (source == "" || target == "") {
       return;
     }
+    var variables = {
+      sourceID: source,
+      targetID: target,
+      sourcePercentage: edgeType == 0 ? edgeValue : 0,
+      sourceAmount: edgeType == 1 ? edgeValue : 0,
+      sourceRemainingBalance: edgeType == 2,
+    };
     createEdge({
-      variables: {
-        sourceID: source,
-        targetID: target,
-        isPercentage: isPercentage,
-        amount: amount,
-      },
+      variables: variables,
     });
     setSource("");
     setTarget("");
-    setIsPercentage(false);
-    setAmount("");
+    setEdgeType(0);
+    setEdgeValue("");
   };
 
   if (getAccountNamesResponse.loading) {
@@ -113,24 +119,33 @@ export default ({ getDataQuery }) => {
           </Select>
         </Grid>
         <Grid item>
-          <FormControlLabel
-            control={
-              <Checkbox
-                value={isPercentage}
-                onChange={() => setIsPercentage(!isPercentage)}
-              />
-            }
-            label="Percentage"
-          />
+          <Select
+            style={{ width: 160 }}
+            labelId="create-edge-select-type-label"
+            id="create-edge-select-type"
+            value={edgeType}
+            label="Type"
+            onChange={(event) => {
+              setEdgeType(event.target.value);
+              setEdgeValue("");
+            }}
+          >
+            {edgeTypes.map((type, index) => (
+              <MenuItem value={index} key={index}>
+                {type}
+              </MenuItem>
+            ))}
+          </Select>
         </Grid>
         <Grid item>
           <TextField
+            disabled={edgeType == 2}
             style={{ width: 160 }}
-            id="create-edge-amount-input"
-            label="Amount"
+            id="create-edge-value-input"
+            label={["%", "$", ""][edgeType]}
             variant="outlined"
-            onChange={(event) => setAmount(event.target.value)}
-            value={amount}
+            onChange={(event) => setEdgeValue(event.target.value)}
+            value={edgeValue}
           />
         </Grid>
       </Grid>

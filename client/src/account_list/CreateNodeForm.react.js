@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField } from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
 
 const CREATE_NODE = gql`

@@ -17,9 +17,10 @@ const GET_DATA = gql`
       id
       sourceId
       targetId
-      isPercentage
-      amount
       value
+      sourcePercentage
+      sourceAmount
+      sourceRemainingBalance
     }
   }
 `;
