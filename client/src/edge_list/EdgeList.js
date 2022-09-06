@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button, List, Grid, Typography, Divider } from "@mui/material";
 import { gql, useLazyQuery } from "@apollo/client";
-import CreateEdgeFormReact from "./CreateEdgeForm.react";
 import EdgeCard from "./EdgeCard.react";
 import EdgeModal from "./EdgeModal.react";
 

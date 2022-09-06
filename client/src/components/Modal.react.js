@@ -13,6 +13,7 @@ const style = {
   p: 4,
 };
 
+// TODO: Switch all this to a dialog (https://codesandbox.io/embed/material-ui-dialog-close-by-esc-3ixsz)
 export default ({ open, title, children }) => {
   return (
     <Modal open={open}>

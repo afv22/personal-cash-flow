@@ -1,11 +1,4 @@
-import {
-  Button,
-  Grid,
-  TextField,
-  Divider,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Grid, TextField, Divider, Select, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Modal from "../components/Modal.react";
@@ -107,6 +100,9 @@ export default ({ open, setOpen, getDataQuery }) => {
   return (
     <Modal open={open} title="Add Edge">
       <Grid container direction="column" alignItems="center" spacing={1}>
+        <Grid item>
+          <Divider />
+        </Grid>
         <Grid container direction="row" spacing={3} justifyContent="center">
           <Grid item>
             <Select
@@ -149,6 +145,9 @@ export default ({ open, setOpen, getDataQuery }) => {
               value={edgeValue}
             />
           </Grid>
+        </Grid>
+        <Grid item>
+          <Divider />
         </Grid>
         <Grid container direction="row" spacing={2} justifyContent="center">
           <Grid item>
