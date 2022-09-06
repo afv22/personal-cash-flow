@@ -4,7 +4,7 @@ import Plot from "react-plotly.js";
 /**
  * Translate Nodes and Edges to a format readable by the Plotly diagram
  */
-const translate = (nodes, edges, realTaxRate) => {
+const translate = (nodes, edges) => {
   var idToIndex = {};
   var labels = ["Total Income", "Taxes"];
   var sources = [];
@@ -20,8 +20,6 @@ const translate = (nodes, edges, realTaxRate) => {
       values.push(node.initialValue);
     }
   });
-
-  console.log(realTaxRate);
 
   edges.map((edge) => {
     sources.push(idToIndex[edge.sourceId]);
@@ -60,7 +58,6 @@ export default ({ data }) => {
     <Plot
       data={[
         {
-          // arrangement: "snap",
           type: "sankey",
           orientation: "h",
           node: {
