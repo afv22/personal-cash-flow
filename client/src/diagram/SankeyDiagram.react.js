@@ -10,6 +10,7 @@ const translate = (nodes, edges) => {
   var sources = [];
   var targets = [];
   var values = [];
+
   nodes.map((node, index) => {
     labels.push(node.name);
     idToIndex[node.id] = index + 1;
@@ -19,11 +20,13 @@ const translate = (nodes, edges) => {
       values.push(node.initialValue);
     }
   });
+
   edges.map((edge) => {
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
     values.push(edge.value);
   });
+
   return [labels, sources, targets, values];
 };
 

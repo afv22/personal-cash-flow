@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
 import { DataGrid } from "@mui/x-data-grid";
@@ -11,7 +11,7 @@ import {
 } from "./utils/rowUpdate";
 
 const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
-  query EdgeListGetAccountNames($nodeIds: [Int!]!) {
+  query EdgeListGetAccountNames($nodeIds: [ID!]!) {
     nodes(nodeIds: $nodeIds) {
       id
       name

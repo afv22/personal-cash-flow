@@ -1,5 +1,5 @@
 import React from "react";
-import SankeyDiagram from "./SankeyDiagram.react";
+import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid } from "@mui/material";
