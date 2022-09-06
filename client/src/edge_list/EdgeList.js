@@ -1,8 +1,9 @@
-import React from "react";
-import { List, Grid, Typography, Divider } from "@mui/material";
+import React, { useState } from "react";
+import { Button, List, Grid, Typography, Divider } from "@mui/material";
 import { gql, useLazyQuery } from "@apollo/client";
 import CreateEdgeFormReact from "./CreateEdgeForm.react";
 import EdgeCard from "./EdgeCard.react";
+import EdgeModal from "./EdgeModal.react";
 
 const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
   query EdgeListGetAccountNames($nodeIds: [Int!]!) {
@@ -14,6 +15,8 @@ const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
 `;
 
 export default ({ edges, getDataQuery }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const accountsWithEdgesIDs = edges
     .map((edge) => [edge.sourceId, edge.targetId])
     .flat()
@@ -57,7 +60,14 @@ export default ({ edges, getDataQuery }) => {
           />
         ))}
       </List>
-      <CreateEdgeFormReact getDataQuery={getDataQuery} />
+      <Button variant="contained" onClick={() => setModalOpen(true)}>
+        Create New Edge
+      </Button>
+      <EdgeModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        getDataQuery={getDataQuery}
+      />
     </Grid>
   );
 };

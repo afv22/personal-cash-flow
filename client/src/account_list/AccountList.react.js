@@ -1,9 +1,10 @@
-import React from "react";
-import { List, Grid, Typography, Divider } from "@mui/material";
+import React, { useState } from "react";
+import { Button, List, Grid, Typography, Divider } from "@mui/material";
 import AccountCard from "./AccountCard.react";
-import CreateNodeForm from "./CreateNodeForm.react";
+import AccountModal from "./AccountModal.react";
 
 export default ({ nodes, getDataQuery }) => {
+  const [modalOpen, setModalOpen] = useState(false);
   return (
     <Grid sx={[{ width: "300px" }]}>
       <Typography variant="h4" align="center">
@@ -15,7 +16,14 @@ export default ({ nodes, getDataQuery }) => {
           <AccountCard account={account} getDataQuery={getDataQuery} />
         ))}
       </List>
-      <CreateNodeForm getDataQuery={getDataQuery} />
+      <Button variant="contained" onClick={() => setModalOpen(true)}>
+        Create New Node
+      </Button>
+      <AccountModal
+        open={modalOpen}
+        setOpen={setModalOpen}
+        getDataQuery={getDataQuery}
+      />
     </Grid>
   );
 };
