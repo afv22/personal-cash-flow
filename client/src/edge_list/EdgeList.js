@@ -3,43 +3,18 @@ import { Box, Button } from "@mui/material";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
 import { DataGrid } from "@mui/x-data-grid";
-import { getColumns, getRows } from "./utils";
+import { getColumns, getRows } from "./utils/processEdges";
+import {
+  processRowUpdate,
+  onProcessRowUpdateError,
+  UPDATE_EDGE,
+} from "./utils/rowUpdate";
 
 const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
   query EdgeListGetAccountNames($nodeIds: [Int!]!) {
     nodes(nodeIds: $nodeIds) {
       id
       name
-    }
-  }
-`;
-
-const UPDATE_EDGE = gql`
-  mutation UpdateEdge(
-    $id: ID!
-    $isTaxable: Boolean!
-    $sourcePercentage: Float!
-    $sourceAmount: Float!
-    $sourceRemainingBalance: Boolean!
-  ) {
-    updateEdge(
-      id: $id
-      data: {
-        isTaxable: $isTaxable
-        sourcePercentage: $sourcePercentage
-        sourceAmount: $sourceAmount
-        sourceRemainingBalance: $sourceRemainingBalance
-      }
-    ) {
-      edge {
-        id
-        sourceId
-        targetId
-        isTaxable
-        sourcePercentage
-        sourceAmount
-        sourceRemainingBalance
-      }
     }
   }
 `;
@@ -51,38 +26,11 @@ export default ({ edges, getDataQuery }) => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
-  const processRowUpdate = React.useCallback(
-    async (newRow) => {
-      // Setting the new value to 1 if switching from a balance
-      if (
-        newRow.value == "N/A" &&
-        (newRow.type == "Percentage" || newRow.type == "Amount")
-      ) {
-        newRow.value = 1;
-      }
-      const vars = {
-        id: newRow.id,
-        isTaxable: newRow.isTaxable,
-        sourcePercentage: newRow.type == "Percentage" ? newRow.value : 0,
-        sourceAmount: newRow.type == "Amount" ? newRow.value : 0,
-        sourceRemainingBalance: newRow.type == "Balance",
-      };
-      const response = await updateEdge({
-        variables: vars,
-      });
-      return response.data.updateEdge.edge;
-    },
-    [setModalOpen]
-  );
-
-  const onProcessRowUpdateError = (error) => {
-    console.error(error);
-  };
-
   const accountsWithEdgesIDs = edges
     .map((edge) => [edge.sourceId, edge.targetId])
     .flat()
     .filter((value, index, self) => self.indexOf(value) === index);
+
   const [getAccountNames, { loading, error, data }] = useLazyQuery(
     EDGE_LIST_GET_ACCOUNT_NAMES,
     {
@@ -115,7 +63,7 @@ export default ({ edges, getDataQuery }) => {
         rowsPerPageOptions={[5, 10, 20]}
         disableSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
-        processRowUpdate={processRowUpdate}
+        processRowUpdate={(newRow) => processRowUpdate(newRow, updateEdge)}
         onProcessRowUpdateError={onProcessRowUpdateError}
       />
       <Button variant="contained" onClick={() => setModalOpen(true)}>

@@ -1,8 +1,7 @@
 import { Grid, TextField, Divider, Select, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import Modal from "../components/Modal.react";
-import ModalButton from "../components/ModalButton.react";
+import Modal, { ModalButton } from "../components/Modal.react";
 
 const CREATE_EDGE_FORM_GET_ACCOUNT_NAMES = gql`
   query CreateEdgeFromGetAccountNames {

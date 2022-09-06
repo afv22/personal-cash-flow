@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Modal } from "@mui/material";
+import { Box, Button, Typography, Modal } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -26,3 +26,13 @@ export default ({ open, title, children }) => {
     </Modal>
   );
 };
+
+const ModalButton = ({ onClick, title }) => {
+  return (
+    <Button variant="contained" onClick={onClick} style={{ width: "120px" }}>
+      {title}
+    </Button>
+  );
+};
+
+export { ModalButton };

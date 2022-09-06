@@ -1,8 +1,7 @@
 import { Grid, TextField, Divider } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import Modal from "../components/Modal.react";
-import ModalButton from "../components/ModalButton.react";
+import Modal, { ModalButton } from "../components/Modal.react";
 
 const CREATE_NODE = gql`
   mutation CreateNode($name: String!, $initialValue: Float!) {
