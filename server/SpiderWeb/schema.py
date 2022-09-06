@@ -1,4 +1,3 @@
-from platform import node
 import graphene
 
 from .models import Node, Edge
@@ -47,7 +46,6 @@ class Query(graphene.ObjectType):
 
     def resolve_edges_from_target_id(self, info, target_id):
         return Edge.objects.filter(targetId=target_id)
-
 
 class Mutation(graphene.ObjectType):
     create_node = NodeCreate.Field()

@@ -34,6 +34,9 @@ class Node(models.Model):
 
     def getOutgoingEdges(self):
         return Edge.objects.filter(sourceId=self.id)
+    
+    def getEdges(self):
+        return self.getIncomingEdges() | self.getOutgoingEdges()
 
     def __str__(self) -> str:
         return self.name
@@ -43,6 +46,7 @@ class Edge(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
+    isTaxable = models.BooleanField(default=False)
     # Only one of these should be set at any given time. Each represents
     # an option for how much of the source balance should be piped through
     sourcePercentage = models.FloatField(default=0)

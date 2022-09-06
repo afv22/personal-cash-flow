@@ -19,9 +19,10 @@ class EdgeType(DjangoObjectType):
         return Edge.objects.get(pk=self.id).calculateThroughValue()
 
 
-class EdgeInput(graphene.InputObjectType):
+class EdgeCreateInput(graphene.InputObjectType):
     sourceId = graphene.ID(required=True)
     targetId = graphene.ID(required=True)
+    isTaxable = graphene.Boolean(required=True)
     sourcePercentage = graphene.Float(required=False)
     sourceAmount = graphene.Float(required=False)
     sourceRemainingBalance = graphene.Boolean(required=False)
@@ -29,7 +30,7 @@ class EdgeInput(graphene.InputObjectType):
 
 class EdgeCreate(graphene.Mutation):
     class Arguments:
-        data = EdgeInput(required=True)
+        data = EdgeCreateInput(required=True)
 
     edge = graphene.Field(EdgeType)
 
@@ -48,6 +49,7 @@ class EdgeCreate(graphene.Mutation):
             id=generateID(),
             sourceId=data.sourceId,
             targetId=data.targetId,
+            isTaxable=data.isTaxable,
             sourcePercentage=data.sourcePercentage,
             sourceAmount=data.sourceAmount,
             sourceRemainingBalance=data.sourceRemainingBalance,
@@ -56,10 +58,17 @@ class EdgeCreate(graphene.Mutation):
         return EdgeCreate(edge=instance)
 
 
+class EdgeUpdateInput(graphene.InputObjectType):
+    isTaxable = graphene.Boolean(required=False)
+    sourcePercentage = graphene.Float(required=False)
+    sourceAmount = graphene.Float(required=False)
+    sourceRemainingBalance = graphene.Boolean(required=False)
+
+
 class EdgeUpdate(graphene.Mutation):
     class Arguments:
-        id = graphene.ID()
-        data = EdgeInput()
+        id = graphene.ID(required=True)
+        data = EdgeUpdateInput(required=True)
 
     edge = graphene.Field(EdgeType)
 
@@ -74,16 +83,27 @@ class EdgeUpdate(graphene.Mutation):
                 data.sourceAmount,
                 data.sourceRemainingBalance,
             ]
-            if sum([1 for option in valueOptions if option]) != 1:
+            if sum([1 for option in valueOptions if option]) > 1:
                 raise GraphQLError(
                     "Set exactly one of sourcePercentage, sourceAmount, or sourceRemainingBalance"
                 )
 
-            instance.sourceId = data.sourceId
-            instance.targetId = data.targetId
-            instance.sourcePercentage = data.sourcePercentage
-            instance.sourceAmount = data.sourceAmount
-            instance.sourceRemainingBalance = data.sourceRemainingBalance
+            if data.sourcePercentage:
+                instance.sourcePercentage = data.sourcePercentage
+                instance.sourceAmount = 0
+                instance.sourceRemainingBalance = False
+            elif data.sourceAmount:
+                instance.sourcePercentage = 0
+                instance.sourceAmount = data.sourceAmount
+                instance.sourceRemainingBalance = False
+            else:
+                instance.sourcePercentage = 0
+                instance.sourceAmount = 0
+                instance.sourceRemainingBalance = True
+
+            if data.isTaxable is not None:
+                instance.isTaxable = data.isTaxable
+
             instance.save()
 
             return EdgeUpdate(edge=instance)
