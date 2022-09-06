@@ -55,9 +55,9 @@ class NodeUpdate(graphene.Mutation):
         instance = Node.objects.get(pk=id)
 
         if instance:
-            if data.name:
+            if data.name is not None:
                 instance.name = data.name
-            if data.initialValue:
+            if data.initialValue is not None:
                 instance.initialValue = data.initialValue
             instance.save()
 

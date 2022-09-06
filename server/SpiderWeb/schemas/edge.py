@@ -16,7 +16,12 @@ class EdgeType(DjangoObjectType):
     value = graphene.Float()
 
     def resolve_value(self, info):
-        return Edge.objects.get(pk=self.id).calculateThroughValue()
+        return Edge.objects.get(pk=self.id).calculateNetValue()
+
+    taxes = graphene.Float()
+
+    def resolve_taxes(self, info):
+        return Edge.objects.get(pk=self.id).calculateTaxes()
 
 
 class EdgeCreateInput(graphene.InputObjectType):

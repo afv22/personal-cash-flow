@@ -10,19 +10,19 @@ class Node(models.Model):
 
     def calculateGrossValue(self) -> float:
         return self.initialValue + sum(
-            [edge.calculateThroughValue() for edge in self.getIncomingEdges()]
+            [edge.calculateNetValue() for edge in self.getIncomingEdges()]
         )
 
     def calculateNetValue(self) -> float:
         outgoingValue = sum(
-            [edge.calculateThroughValue() for edge in self.getOutgoingEdges()]
+            [edge.calculateGrossValue() for edge in self.getOutgoingEdges()]
         )
         return self.calculateGrossValue() - outgoingValue
 
     def calculateRemainingBalanceForEdge(self, remaining_edge):
         outgoingValue = sum(
             [
-                edge.calculateThroughValue()
+                edge.calculateGrossValue()
                 for edge in self.getOutgoingEdges()
                 if edge.id != remaining_edge.id
             ]
@@ -34,7 +34,7 @@ class Node(models.Model):
 
     def getOutgoingEdges(self):
         return Edge.objects.filter(sourceId=self.id)
-    
+
     def getEdges(self):
         return self.getIncomingEdges() | self.getOutgoingEdges()
 
@@ -56,10 +56,33 @@ class Edge(models.Model):
     def __str__(self) -> str:
         return self.id
 
-    def calculateThroughValue(self) -> float:
+    def calculateGrossValue(self) -> float:
         sourceNode = Node.objects.get(pk=self.sourceId)
         if self.sourcePercentage:
             return sourceNode.calculateGrossValue() * self.sourcePercentage / 100
         elif self.sourceAmount:
             return self.sourceAmount
         return sourceNode.calculateRemainingBalanceForEdge(self)
+
+    def calculateTaxes(self) -> float:
+        if not self.isTaxable:
+            return 0
+        return self.calculateGrossValue() * calculateRealTaxRate()
+
+    def calculateNetValue(self) -> float:
+        return self.calculateGrossValue() - self.calculateTaxes()
+
+
+# TODO: Add different tax brackets
+def calculateRealTaxRate() -> float:
+    taxableValue = sum(
+        map(
+            lambda edge: edge.calculateGrossValue(), Edge.objects.filter(isTaxable=True)
+        )
+    )
+    federalTaxes = 33603 + (taxableValue - 164925) * 0.32
+    stateTaxes = 3500 + (taxableValue - 60000) * 0.085
+    medicareTaxes = taxableValue * 0.0145
+    socSecTaxes = taxableValue * 0.062
+    totalTaxes = sum([federalTaxes, stateTaxes, medicareTaxes, socSecTaxes])
+    return totalTaxes / taxableValue
