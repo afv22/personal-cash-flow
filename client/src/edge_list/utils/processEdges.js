@@ -18,7 +18,7 @@ const getColumns = (getDataQuery) => {
       headerName: "Target",
       width: 180,
       editable: false,
-      valueGetter: (params) => params.row.source,
+      valueGetter: (params) => params.row.target,
     },
     {
       field: "type",
@@ -51,12 +51,12 @@ const getColumns = (getDataQuery) => {
   ];
 };
 
-const getRows = (edges) => {
+const getRows = (edges, accountNames) => {
   return edges.map((edge) => {
     var rowData = {
       id: edge.id,
-      source: edge.sourceId,
-      target: edge.targetId,
+      source: accountNames[edge.sourceId],
+      target: accountNames[edge.targetId],
       isTaxable: edge.isTaxable,
     };
 

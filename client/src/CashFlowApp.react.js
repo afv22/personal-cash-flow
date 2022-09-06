@@ -2,7 +2,7 @@ import React from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList";
 
 const GET_DATA = gql`
@@ -18,6 +18,7 @@ const GET_DATA = gql`
       sourceId
       targetId
       value
+      taxes
       isTaxable
       sourcePercentage
       sourceAmount
@@ -35,7 +36,16 @@ export default ({}) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="center" spacing={8}>
+    <Grid
+      container
+      direction="column"
+      alignItems="center"
+      spacing={8}
+      paddingBottom={20}
+    >
+      <Typography variant="h2" marginTop={15}>
+        Cash Flow
+      </Typography>
       <SankeyDiagram data={data} />
       <Grid item>
         <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />

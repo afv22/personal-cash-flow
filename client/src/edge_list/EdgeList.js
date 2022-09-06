@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Divider } from "@mui/material";
+import { Box, Button, Divider, IconButton } from "@mui/material";
 import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
 import { DataGrid } from "@mui/x-data-grid";
@@ -9,6 +9,7 @@ import {
   onProcessRowUpdateError,
   UPDATE_EDGE,
 } from "./utils/rowUpdate";
+import { Delete } from "@mui/icons-material";
 
 const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
   query EdgeListGetAccountNames($nodeIds: [ID!]!) {
@@ -57,7 +58,7 @@ export default ({ edges, getDataQuery }) => {
   return (
     <Box sx={{ height: 400, width: 900 }}>
       <DataGrid
-        rows={getRows(edges)}
+        rows={getRows(edges, accountNames)}
         columns={getColumns(getDataQuery)}
         pageSize={10}
         rowsPerPageOptions={[5, 10, 20]}
@@ -65,6 +66,13 @@ export default ({ edges, getDataQuery }) => {
         experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={(newRow) => processRowUpdate(newRow, updateEdge)}
         onProcessRowUpdateError={onProcessRowUpdateError}
+        components={{
+          BaseFormControl: (
+            <IconButton>
+              <Delete />
+            </IconButton>
+          ),
+        }}
       />
       <Button variant="contained" onClick={() => setModalOpen(true)}>
         Create New Edge

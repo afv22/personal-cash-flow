@@ -1,4 +1,12 @@
-import { Grid, TextField, Divider, Select, MenuItem } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Divider,
+  Select,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Modal, { ModalButton } from "../components/Modal.react";
@@ -47,6 +55,7 @@ export default ({ open, setOpen, getDataQuery }) => {
   const [target, setTarget] = useState("");
   const [edgeType, setEdgeType] = useState(0);
   const [edgeValue, setEdgeValue] = useState("");
+  const [edgeIsTaxable, setEdgeIsTaxable] = useState(false);
 
   const edgeTypesMenu = ["Percentage", "Amount", "Remaining Balance"].map(
     (type, index) => (
@@ -66,6 +75,7 @@ export default ({ open, setOpen, getDataQuery }) => {
     setTarget("");
     setEdgeType(0);
     setEdgeValue("");
+    setEdgeIsTaxable(false);
     setOpen(false);
   };
 
@@ -77,7 +87,7 @@ export default ({ open, setOpen, getDataQuery }) => {
       variables: {
         sourceID: source,
         targetID: target,
-        isTaxable: false,
+        isTaxable: edgeIsTaxable,
         sourcePercentage: edgeType == 0 ? parseFloat(edgeValue) : 0,
         sourceAmount: edgeType == 1 ? parseFloat(edgeValue) : 0,
         sourceRemainingBalance: edgeType == 2,
@@ -144,6 +154,17 @@ export default ({ open, setOpen, getDataQuery }) => {
               value={edgeValue}
             />
           </Grid>
+        </Grid>
+        <Grid container direction="row" justifyContent="center">
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={edgeIsTaxable}
+                onClick={() => setEdgeIsTaxable(!edgeIsTaxable)}
+              />
+            }
+            label="Is Taxable"
+          />
         </Grid>
         <Grid item>
           <Divider />

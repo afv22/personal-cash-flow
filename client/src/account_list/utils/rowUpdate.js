@@ -1,4 +1,5 @@
 const processRowUpdate = async (newRow, updateNode) => {
+  console.log(newRow);
   const response = await updateNode({
     variables: {
       id: newRow.id,
@@ -6,6 +7,7 @@ const processRowUpdate = async (newRow, updateNode) => {
       initialValue: newRow.initialValue,
     },
   });
+  console.log(response);
   return response.data.updateNode.node;
 };
 

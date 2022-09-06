@@ -4,27 +4,36 @@ import Plot from "react-plotly.js";
 /**
  * Translate Nodes and Edges to a format readable by the Plotly diagram
  */
-const translate = (nodes, edges) => {
+const translate = (nodes, edges, realTaxRate) => {
   var idToIndex = {};
-  var labels = ["Total Income"];
+  var labels = ["Total Income", "Taxes"];
   var sources = [];
   var targets = [];
   var values = [];
 
   nodes.map((node, index) => {
     labels.push(node.name);
-    idToIndex[node.id] = index + 1;
+    idToIndex[node.id] = index + 2;
     if (node.initialValue > 0) {
       sources.push(0);
-      targets.push(index + 1);
+      targets.push(index + 2);
       values.push(node.initialValue);
     }
   });
 
+  console.log(realTaxRate);
+
   edges.map((edge) => {
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
-    values.push(edge.value);
+    if (edge.isTaxable) {
+      values.push(edge.value);
+      sources.push(idToIndex[edge.sourceId]);
+      targets.push(1);
+      values.push(edge.taxes);
+    } else {
+      values.push(edge.value);
+    }
   });
 
   return [labels, sources, targets, values];
@@ -51,7 +60,7 @@ export default ({ data }) => {
     <Plot
       data={[
         {
-          arrangement: "snap",
+          // arrangement: "snap",
           type: "sankey",
           orientation: "h",
           node: {
@@ -71,7 +80,7 @@ export default ({ data }) => {
           },
         },
       ]}
-      layout={{ width: 1200, height: 600, title: "Total Compensation" }}
+      layout={{ width: 1200, height: 600 }}
     />
   );
 };
