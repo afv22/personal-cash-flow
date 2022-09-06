@@ -18,6 +18,7 @@ const GET_DATA = gql`
       sourceId
       targetId
       value
+      isTaxable
       sourcePercentage
       sourceAmount
       sourceRemainingBalance
@@ -34,15 +35,13 @@ export default ({}) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="center">
+    <Grid container direction="column" alignItems="center" spacing={8}>
       <SankeyDiagram data={data} />
-      <Grid container justifyContent="center" spacing={12}>
-        <Grid item>
-          <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
-        </Grid>
-        <Grid item>
-          <EdgeList edges={data.allEdges} getDataQuery={GET_DATA} />
-        </Grid>
+      <Grid item>
+        <AccountList nodes={data.allNodes} getDataQuery={GET_DATA} />
+      </Grid>
+      <Grid item>
+        <EdgeList edges={data.allEdges} getDataQuery={GET_DATA} />
       </Grid>
     </Grid>
   );

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button, List, Grid, Typography, Divider } from "@mui/material";
-import { gql, useLazyQuery } from "@apollo/client";
-import EdgeCard from "./EdgeCard.react";
+import { Box, Button } from "@mui/material";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
+import { DataGrid } from "@mui/x-data-grid";
+import { getColumns, getRows } from "./utils";
 
 const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
   query EdgeListGetAccountNames($nodeIds: [Int!]!) {
@@ -13,8 +14,70 @@ const EDGE_LIST_GET_ACCOUNT_NAMES = gql`
   }
 `;
 
+const UPDATE_EDGE = gql`
+  mutation UpdateEdge(
+    $id: ID!
+    $isTaxable: Boolean!
+    $sourcePercentage: Float!
+    $sourceAmount: Float!
+    $sourceRemainingBalance: Boolean!
+  ) {
+    updateEdge(
+      id: $id
+      data: {
+        isTaxable: $isTaxable
+        sourcePercentage: $sourcePercentage
+        sourceAmount: $sourceAmount
+        sourceRemainingBalance: $sourceRemainingBalance
+      }
+    ) {
+      edge {
+        id
+        sourceId
+        targetId
+        isTaxable
+        sourcePercentage
+        sourceAmount
+        sourceRemainingBalance
+      }
+    }
+  }
+`;
+
 export default ({ edges, getDataQuery }) => {
+  const [updateEdge, _] = useMutation(UPDATE_EDGE, {
+    refetchQueries: [{ query: getDataQuery }, "GetData"],
+  });
+
   const [modalOpen, setModalOpen] = useState(false);
+
+  const processRowUpdate = React.useCallback(
+    async (newRow) => {
+      // Setting the new value to 1 if switching from a balance
+      if (
+        newRow.value == "N/A" &&
+        (newRow.type == "Percentage" || newRow.type == "Amount")
+      ) {
+        newRow.value = 1;
+      }
+      const vars = {
+        id: newRow.id,
+        isTaxable: newRow.isTaxable,
+        sourcePercentage: newRow.type == "Percentage" ? newRow.value : 0,
+        sourceAmount: newRow.type == "Amount" ? newRow.value : 0,
+        sourceRemainingBalance: newRow.type == "Balance",
+      };
+      const response = await updateEdge({
+        variables: vars,
+      });
+      return response.data.updateEdge.edge;
+    },
+    [setModalOpen]
+  );
+
+  const onProcessRowUpdateError = (error) => {
+    console.error(error);
+  };
 
   const accountsWithEdgesIDs = edges
     .map((edge) => [edge.sourceId, edge.targetId])
@@ -44,21 +107,17 @@ export default ({ edges, getDataQuery }) => {
   }
 
   return (
-    <Grid sx={[{ width: "400px" }]}>
-      <Typography variant="h4" align="center">
-        Edges
-      </Typography>
-      <Divider variant="middle" />
-      <List>
-        {edges.map((edge) => (
-          <EdgeCard
-            edge={edge}
-            sourceName={accountNames[edge.sourceId]}
-            targetName={accountNames[edge.targetId]}
-            getDataQuery={getDataQuery}
-          />
-        ))}
-      </List>
+    <Box sx={{ height: 400, width: 900 }}>
+      <DataGrid
+        rows={getRows(edges)}
+        columns={getColumns(getDataQuery)}
+        pageSize={10}
+        rowsPerPageOptions={[5, 10, 20]}
+        disableSelectionOnClick
+        experimentalFeatures={{ newEditingApi: true }}
+        processRowUpdate={processRowUpdate}
+        onProcessRowUpdateError={onProcessRowUpdateError}
+      />
       <Button variant="contained" onClick={() => setModalOpen(true)}>
         Create New Edge
       </Button>
@@ -67,6 +126,6 @@ export default ({ edges, getDataQuery }) => {
         setOpen={setModalOpen}
         getDataQuery={getDataQuery}
       />
-    </Grid>
+    </Box>
   );
 };
