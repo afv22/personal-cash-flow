@@ -40,7 +40,7 @@ export default ({ open, setOpen, getDataQuery }) => {
   };
 
   return (
-    <Modal open={open} title="Add Node">
+    <Modal open={open} closeModal={closeModal} title="Add Node">
       <Grid container direction="column" alignItems="center" spacing={2}>
         <Grid item>
           <TextField

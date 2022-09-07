@@ -1,5 +1,5 @@
 import React from "react";
-import DeleteNodeButton from "./../DeleteNodeButton.react";
+import DeleteNodeButton from "../DeleteNodeButton.react";
 
 const getRows = (nodes) => {
   return nodes.map((node) => {
@@ -13,7 +13,7 @@ const getRows = (nodes) => {
 
 const getColumns = (getDataQuery) => {
   return [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90, hide: true },
     { field: "name", headerName: "Account name", width: 180, editable: true },
     {
       field: "initialValue",

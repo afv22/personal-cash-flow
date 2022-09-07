@@ -107,7 +107,7 @@ export default ({ open, setOpen, getDataQuery }) => {
   ));
 
   return (
-    <Modal open={open} title="Add Edge">
+    <Modal open={open} closeModal={closeModal} title="Add Edge">
       <Grid container direction="column" alignItems="center" spacing={1}>
         <Grid item>
           <Divider />

@@ -5,7 +5,7 @@ const edgeTypes = ["Percentage", "Amount", "Balance"];
 
 const getColumns = (getDataQuery) => {
   return [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 90, hide: true },
     {
       field: "source",
       headerName: "Source",

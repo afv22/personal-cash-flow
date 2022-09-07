@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import AccountModal from "./AccountModal.react";
 import { DataGrid } from "@mui/x-data-grid";
 import { gql, useMutation } from "@apollo/client";
-import { getRows, getColumns } from "./utils/processData";
+import { getRows, getColumns } from "./utils/processNodes";
 import { processRowUpdate, onProcessRowUpdateError } from "./utils/rowUpdate";
 
 const UPDATE_NODE = gql`
@@ -19,26 +19,28 @@ const UPDATE_NODE = gql`
 `;
 
 export default ({ nodes, getDataQuery }) => {
+  const pageSizes = [10, 20, 50];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(pageSizes[0]);
   const [updateNode, _] = useMutation(UPDATE_NODE, {
     refetchQueries: [{ query: getDataQuery }, "GetData"],
   });
-
-  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <Box sx={{ height: 400, width: 900 }}>
       <DataGrid
         rows={getRows(nodes)}
         columns={getColumns(getDataQuery)}
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        rowsPerPageOptions={pageSizes}
         disableSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={(newRow) => processRowUpdate(newRow, updateNode)}
         onProcessRowUpdateError={onProcessRowUpdateError}
       />
       <Button variant="contained" onClick={() => setModalOpen(true)}>
-        Create New Node
+        Add Node
       </Button>
       <AccountModal
         open={modalOpen}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Typography, Modal } from "@mui/material";
+import { Box, Button, Typography, Modal, Divider } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -13,14 +13,14 @@ const style = {
   p: 4,
 };
 
-// TODO: Switch all this to a dialog (https://codesandbox.io/embed/material-ui-dialog-close-by-esc-3ixsz)
-export default ({ open, title, children }) => {
+export default ({ open, closeModal, title, children }) => {
   return (
-    <Modal open={open}>
+    <Modal open={open} onClose={closeModal}>
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {title}
         </Typography>
+        <Divider sx={{ marginY: 2 }} variant="middle" />
         {children}
       </Box>
     </Modal>

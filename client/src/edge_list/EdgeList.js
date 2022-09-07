@@ -26,6 +26,7 @@ export default ({ edges, getDataQuery }) => {
   });
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [pageSize, setPageSize] = useState(10);
 
   const accountsWithEdgesIDs = edges
     .map((edge) => [edge.sourceId, edge.targetId])
@@ -60,8 +61,9 @@ export default ({ edges, getDataQuery }) => {
       <DataGrid
         rows={getRows(edges, accountNames)}
         columns={getColumns(getDataQuery)}
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
+        pageSize={pageSize}
+        onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+        rowsPerPageOptions={[10, 20, 50]}
         disableSelectionOnClick
         experimentalFeatures={{ newEditingApi: true }}
         processRowUpdate={(newRow) => processRowUpdate(newRow, updateEdge)}
@@ -75,7 +77,7 @@ export default ({ edges, getDataQuery }) => {
         }}
       />
       <Button variant="contained" onClick={() => setModalOpen(true)}>
-        Create New Edge
+        Add Edge
       </Button>
       <EdgeModal
         open={modalOpen}
