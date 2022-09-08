@@ -32,9 +32,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 # Application definition
 
@@ -45,10 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
     "graphene_django",
     "corsheaders",
-    "Cherub",
     "SpiderWeb",
 ]
 
@@ -84,7 +80,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Eden.wsgi.application"
 
-AUTH_USER_MODEL = "Cherub.User"
+AUTH_USER_MODEL = "SpiderWeb.User"
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Database
@@ -99,15 +100,11 @@ DATABASES = {
 
 # Frontend Communication
 
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
-}
-
 GRAPHENE = {
     "SCHEMA": "SpiderWeb.schema.schema",
+    "MIDDLEWARE": [
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
+    ],
 }
 
 

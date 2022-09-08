@@ -1,10 +1,11 @@
 import graphene
-
+import graphql_jwt
 from .models import Node, Edge
 from .schemas.node import *
 from .schemas.edge import *
+from .schemas.user import *
 
-
+# Distribute this https://www.howtographql.com/graphql-python/4-authentication/
 class Query(graphene.ObjectType):
 
     all_nodes = graphene.List(NodeType)
@@ -60,6 +61,12 @@ class Mutation(graphene.ObjectType):
     create_edge = EdgeCreate.Field()
     update_edge = EdgeUpdate.Field()
     delete_edge = EdgeDelete.Field()
+
+    create_user = UserCreate.Field()
+
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -21,7 +21,6 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include(("Cherub.routers", "Cherub"))),
     # Remove csrf_exempt for production. Adding it now because it blocks the app every time
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True))),
     path("", views.index),
