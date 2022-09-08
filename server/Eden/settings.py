@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "SpiderWeb",
+    "rest_framework",
     "graphene_django",
     "corsheaders",
     "Cherub",
+    "SpiderWeb",
 ]
 
 MIDDLEWARE = [
@@ -96,6 +97,19 @@ DATABASES = {
     }
 }
 
+# Frontend Communication
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
+}
+
+GRAPHENE = {
+    "SCHEMA": "SpiderWeb.schema.schema",
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -137,7 +151,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-GRAPHENE = {
-    "SCHEMA": "SpiderWeb.schema.schema",
-}

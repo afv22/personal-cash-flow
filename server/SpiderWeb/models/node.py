@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from .utils.fetch_model import fetch_model
 from .utils.model_names import Name
 
@@ -7,6 +8,7 @@ class Node(models.Model):
     # Each variable represents a database field
     # The var name must match the column name in the database
     id = models.PositiveBigIntegerField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     initialValue = models.FloatField(default=1.0)
 

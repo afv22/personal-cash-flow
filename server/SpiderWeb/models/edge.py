@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from .utils.fetch_model import fetch_model
 from .utils.tax_rate import calculateRealTaxRate
 from .utils.model_names import Name
@@ -6,6 +7,7 @@ from .utils.model_names import Name
 
 class Edge(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
     isTaxable = models.BooleanField(default=False)
@@ -19,9 +21,7 @@ class Edge(models.Model):
         return self.id
 
     def calculateGrossValue(self) -> float:
-        sourceNode = fetch_model(Name.NODE.value).objects.get(
-            pk=self.sourceId
-        )
+        sourceNode = fetch_model(Name.NODE.value).objects.get(pk=self.sourceId)
         if self.sourcePercentage:
             return sourceNode.calculateGrossValue() * self.sourcePercentage / 100
         elif self.sourceAmount:
