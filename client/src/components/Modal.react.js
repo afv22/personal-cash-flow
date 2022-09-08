@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Button, Typography, Modal, Divider } from "@mui/material";
 
-const style = {
+const modalBoxStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
@@ -13,10 +13,10 @@ const style = {
   p: 4,
 };
 
-export default ({ open, closeModal, title, children }) => {
+const NewModal = ({ open, closeModal, title, children }) => {
   return (
     <Modal open={open} onClose={closeModal}>
-      <Box sx={style}>
+      <Box sx={modalBoxStyle}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
           {title}
         </Typography>
@@ -35,4 +35,5 @@ const ModalButton = ({ onClick, title }) => {
   );
 };
 
+export default NewModal;
 export { ModalButton };

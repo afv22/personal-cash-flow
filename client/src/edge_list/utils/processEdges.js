@@ -3,7 +3,7 @@ import DeleteEdgeButton from "./../DeleteEdgeButton.react";
 
 const edgeTypes = ["Percentage", "Amount", "Balance"];
 
-const getColumns = (getDataQuery) => {
+const getColumns = () => {
   return [
     { field: "id", headerName: "ID", width: 90, hide: true },
     {
@@ -32,6 +32,7 @@ const getColumns = (getDataQuery) => {
       field: "value",
       headerName: "Value",
       editable: true,
+      width: 60,
       valueGetter: (params) => params.row.value,
     },
     {
@@ -44,15 +45,17 @@ const getColumns = (getDataQuery) => {
       field: "delete",
       type: "actions",
       width: 60,
-      getActions: (params) => [
-        <DeleteEdgeButton params={params} getDataQuery={getDataQuery} />,
-      ],
+      getActions: (params) => [<DeleteEdgeButton params={params} />],
     },
   ];
 };
 
-const getRows = (edges, accountNames) => {
-  return edges.map((edge) => {
+const getRows = (data) => {
+  const accountNames = Object.assign(
+    {},
+    ...data.allNodes.map((node) => ({ [node.id]: node.name }))
+  );
+  return data.allEdges.map((edge) => {
     var rowData = {
       id: edge.id,
       source: accountNames[edge.sourceId],

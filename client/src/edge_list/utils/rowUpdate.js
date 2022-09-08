@@ -1,36 +1,3 @@
-import { useCallback } from "react";
-import { gql } from "@apollo/client";
-
-const UPDATE_EDGE = gql`
-  mutation UpdateEdge(
-    $id: ID!
-    $isTaxable: Boolean!
-    $sourcePercentage: Float!
-    $sourceAmount: Float!
-    $sourceRemainingBalance: Boolean!
-  ) {
-    updateEdge(
-      id: $id
-      data: {
-        isTaxable: $isTaxable
-        sourcePercentage: $sourcePercentage
-        sourceAmount: $sourceAmount
-        sourceRemainingBalance: $sourceRemainingBalance
-      }
-    ) {
-      edge {
-        id
-        sourceId
-        targetId
-        isTaxable
-        sourcePercentage
-        sourceAmount
-        sourceRemainingBalance
-      }
-    }
-  }
-`;
-
 const processRowUpdate = async (newRow, updateEdge) => {
   // Setting the new value to 1 if switching from a balance
   if (
@@ -56,4 +23,4 @@ const onProcessRowUpdateError = (error) => {
   console.error(error);
 };
 
-export { processRowUpdate, onProcessRowUpdateError, UPDATE_EDGE };
+export { processRowUpdate, onProcessRowUpdateError };

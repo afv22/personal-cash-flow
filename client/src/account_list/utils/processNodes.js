@@ -11,7 +11,7 @@ const getRows = (nodes) => {
   });
 };
 
-const getColumns = (getDataQuery) => {
+const getColumns = () => {
   return [
     { field: "id", headerName: "ID", width: 90, hide: true },
     { field: "name", headerName: "Account name", width: 180, editable: true },
@@ -25,9 +25,7 @@ const getColumns = (getDataQuery) => {
       field: "delete",
       type: "actions",
       width: 60,
-      getActions: (params) => [
-        <DeleteNodeButton params={params} getDataQuery={getDataQuery} />,
-      ],
+      getActions: (params) => [<DeleteNodeButton params={params} />],
     },
   ];
 };

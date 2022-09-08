@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { gql, useMutation } from "@apollo/client";
+import { DataQueryContext } from "../CashFlowApp.react";
 
 const DELETE_NODE = gql`
   mutation DeleteNode($id: ID!) {
@@ -13,9 +14,10 @@ const DELETE_NODE = gql`
   }
 `;
 
-export default ({ params, getDataQuery }) => {
+export default ({ params }) => {
+  const refreshData = useContext(DataQueryContext);
   const [deleteNode, _] = useMutation(DELETE_NODE, {
-    refetchQueries: [{ query: getDataQuery }, "GetData"],
+    refetchQueries: [{ query: refreshData }, "GetData"],
   });
 
   const onClick = () => {
