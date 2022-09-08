@@ -19,7 +19,9 @@ class Edge(models.Model):
         return self.id
 
     def calculateGrossValue(self) -> float:
-        sourceNode = fetch_model(Name.NODE.value).objects.get(pk=self.sourceId)
+        sourceNode = fetch_model(Name.NODE.value).objects.get(
+            pk=self.sourceId
+        )
         if self.sourcePercentage:
             return sourceNode.calculateGrossValue() * self.sourcePercentage / 100
         elif self.sourceAmount:
