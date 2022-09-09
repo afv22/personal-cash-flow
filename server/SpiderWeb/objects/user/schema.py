@@ -1,12 +1,11 @@
-from importlib.metadata import requires
 import graphene
 from graphene_django import DjangoObjectType
-from ..models.user import User
+from .model import UserModel
 
 
 class UserType(DjangoObjectType):
     class Meta:
-        model = User
+        model = UserModel
         fields = "__all__"
 
 
@@ -30,7 +29,7 @@ class UserCreate(graphene.Mutation):
         info,
         data,
     ):
-        user = User(
+        user = UserModel(
             username=data.username,
             email=data.email,
             first_name=data.first_name,

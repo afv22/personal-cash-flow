@@ -3,10 +3,10 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
-from .user_manager import UserManager
+from .manager import UserManager
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class UserModel(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, max_length=255, unique=True)
     email = models.EmailField(db_index=True, unique=True, null=True, blank=True)
     first_name = models.CharField(max_length=255)

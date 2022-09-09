@@ -1,23 +1,23 @@
 import graphene
 from graphene_django import DjangoObjectType
-from ..helpers import generateID
-from ..models import Node
+from ...helpers import generateID
+from .model import NodeModel
 
 
 class NodeType(DjangoObjectType):
     class Meta:
-        model = Node
+        model = NodeModel
         fields = "__all__"
 
     gross_value = graphene.Float(required=True, node_id=graphene.ID())
 
     def resolve_gross_value(self, info):
-        return Node.objects.get(pk=self.id).calculateGrossValue()
+        return NodeModel.objects.get(pk=self.id).calculateGrossValue()
 
     net_value = graphene.Float(required=True, node_id=graphene.ID())
 
     def resolve_net_value(self, info):
-        return Node.objects.get(pk=self.id).calculateNetValue()
+        return NodeModel.objects.get(pk=self.id).calculateNetValue()
 
 
 class NodeInput(graphene.InputObjectType):
@@ -33,7 +33,7 @@ class NodeCreate(graphene.Mutation):
 
     @staticmethod
     def mutate(root, info, data=None):
-        node_instance = Node(
+        node_instance = NodeModel(
             id=generateID(),
             name=data.name,
             initialValue=data.initialValue,
@@ -52,7 +52,7 @@ class NodeUpdate(graphene.Mutation):
     @staticmethod
     def mutate(root, info, id, data=None):
 
-        instance = Node.objects.get(pk=id)
+        instance = NodeModel.objects.get(pk=id)
 
         if instance:
             if data.name is not None:
@@ -69,12 +69,18 @@ class NodeDelete(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
 
-    node = graphene.Field(NodeType)
+    success = graphene.Boolean()
 
     @staticmethod
     def mutate(root, info, id):
-        instance = Node.objects.get(pk=id)
+        instance = NodeModel.objects.get(pk=id)
         for edge in instance.getEdges():
             edge.delete()
         instance.delete()
-        return None
+        return True
+
+
+class NodeMutation(graphene.ObjectType):
+    create_node = NodeCreate.Field()
+    update_node = NodeUpdate.Field()
+    delete_node = NodeDelete.Field()

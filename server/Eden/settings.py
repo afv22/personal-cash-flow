@@ -80,13 +80,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "Eden.wsgi.application"
 
-AUTH_USER_MODEL = "SpiderWeb.User"
+AUTH_USER_MODEL = "SpiderWeb.UserModel"
 
 AUTHENTICATION_BACKENDS = [
     "graphql_jwt.backends.JSONWebTokenBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

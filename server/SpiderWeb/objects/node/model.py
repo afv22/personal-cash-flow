@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
-from .utils.fetch_model import fetch_model
-from .utils.model_names import Name
+from SpiderWeb.models.utils.fetch_model import fetch_model
+from SpiderWeb.models.utils.model_names import Name
 
 
-class Node(models.Model):
+class NodeModel(models.Model):
     # Each variable represents a database field
     # The var name must match the column name in the database
     id = models.PositiveBigIntegerField(primary_key=True)

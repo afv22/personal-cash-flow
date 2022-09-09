@@ -1,27 +1,9 @@
-from email.policy import default
-from importlib.metadata import requires
 import graphene
-from graphene_django import DjangoObjectType
-from ..helpers import generateID
+from SpiderWeb.helpers import generateID
 from graphql import GraphQLError
 
-from ..models import Edge
-
-
-class EdgeType(DjangoObjectType):
-    class Meta:
-        model = Edge
-        fields = "__all__"
-
-    value = graphene.Float()
-
-    def resolve_value(self, info):
-        return Edge.objects.get(pk=self.id).calculateNetValue()
-
-    taxes = graphene.Float()
-
-    def resolve_taxes(self, info):
-        return Edge.objects.get(pk=self.id).calculateTaxes()
+from .model import EdgeModel
+from .type import EdgeType
 
 
 class EdgeCreateInput(graphene.InputObjectType):
@@ -50,7 +32,7 @@ class EdgeCreate(graphene.Mutation):
             raise GraphQLError(
                 "Set exactly one of sourcePercentage, sourceAmount, or sourceRemainingBalance"
             )
-        instance = Edge(
+        instance = EdgeModel(
             id=generateID(),
             sourceId=data.sourceId,
             targetId=data.targetId,
@@ -80,7 +62,7 @@ class EdgeUpdate(graphene.Mutation):
     @staticmethod
     def mutate(root, info, id, data=None):
 
-        instance = Edge.objects.get(pk=id)
+        instance = EdgeModel.objects.get(pk=id)
 
         if instance:
             valueOptions = [
@@ -119,10 +101,16 @@ class EdgeDelete(graphene.Mutation):
     class Arguments:
         id = graphene.ID()
 
-    edge = graphene.Field(EdgeType)
+    success = graphene.Boolean()
 
     @staticmethod
     def mutate(root, info, id):
-        instance = Edge.objects.get(pk=id)
+        instance = EdgeModel.objects.get(pk=id)
         instance.delete()
-        return None
+        return True
+
+
+class EdgeMutation(graphene.ObjectType):
+    create_edge = EdgeCreate.Field()
+    update_edge = EdgeUpdate.Field()
+    delete_edge = EdgeDelete.Field()

@@ -1,11 +1,11 @@
 from django.db import models
 from django.conf import settings
-from .utils.fetch_model import fetch_model
-from .utils.tax_rate import calculateRealTaxRate
-from .utils.model_names import Name
+from SpiderWeb.models.utils.fetch_model import fetch_model
+from SpiderWeb.models.utils.tax_rate import calculateRealTaxRate
+from SpiderWeb.models.utils.model_names import Name
 
 
-class Edge(models.Model):
+class EdgeModel(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sourceId = models.PositiveBigIntegerField()

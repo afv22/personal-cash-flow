@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import Edge, Node, User
+from SpiderWeb.models import EdgeModel, NodeModel, UserModel
 
-# Register your models here.
-
-admin.site.register(User)
-admin.site.register(Edge)
-admin.site.register(Node)
+admin.site.register(UserModel)
+admin.site.register(EdgeModel)
+admin.site.register(NodeModel)
