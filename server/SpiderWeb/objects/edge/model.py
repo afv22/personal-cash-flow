@@ -29,7 +29,6 @@ class EdgeModel(models.Model):
     def calculateTaxes(self) -> float:
         if not self.isTaxable:
             return 0
-        print(self.calculateGrossValue())
         return self.calculateGrossValue() * calculateRealTaxRate()
 
     def calculateNetValue(self) -> float:

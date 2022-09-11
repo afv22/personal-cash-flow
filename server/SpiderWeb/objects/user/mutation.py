@@ -1,12 +1,6 @@
 import graphene
-from graphene_django import DjangoObjectType
 from .model import UserModel
-
-
-class UserType(DjangoObjectType):
-    class Meta:
-        model = UserModel
-        fields = "__all__"
+from .type import UserType
 
 
 class UserInput(graphene.InputObjectType):
@@ -38,3 +32,7 @@ class UserCreate(graphene.Mutation):
         user.save()
 
         return UserCreate(user=user)
+
+
+class UserMutation(graphene.ObjectType):
+    create_user = UserCreate.Field()

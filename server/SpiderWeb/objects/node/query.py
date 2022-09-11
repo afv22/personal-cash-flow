@@ -22,4 +22,5 @@ class NodeQuery(graphene.ObjectType):
     )  # Parenthesis when it's the outer type
 
     def resolve_node(self, info, node_id):
+        print(info.context.user)
         return NodeModel.objects.get(pk=node_id)
