@@ -1,13 +1,11 @@
 from django.db import models
 from django.conf import settings
-from SpiderWeb.models.utils.fetch_model import fetch_model
-from SpiderWeb.models.utils.tax_rate import calculateRealTaxRate
-from SpiderWeb.models.utils.model_names import Name
+from SpiderWeb.helpers import fetch_model, calculateRealTaxRate, Name
 
 
 class EdgeModel(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
     isTaxable = models.BooleanField(default=False)
@@ -18,7 +16,7 @@ class EdgeModel(models.Model):
     sourceRemainingBalance = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return self.id
+        return f"{self.sourceId} - {self.targetId}"
 
     def calculateGrossValue(self) -> float:
         sourceNode = fetch_model(Name.NODE.value).objects.get(pk=self.sourceId)
@@ -31,6 +29,7 @@ class EdgeModel(models.Model):
     def calculateTaxes(self) -> float:
         if not self.isTaxable:
             return 0
+        print(self.calculateGrossValue())
         return self.calculateGrossValue() * calculateRealTaxRate()
 
     def calculateNetValue(self) -> float:

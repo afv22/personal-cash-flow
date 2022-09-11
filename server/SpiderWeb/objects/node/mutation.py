@@ -1,6 +1,6 @@
 import graphene
 from graphene_django import DjangoObjectType
-from ...helpers import generateID
+from SpiderWeb.helpers import generateID
 from .model import NodeModel
 
 
@@ -37,6 +37,7 @@ class NodeCreate(graphene.Mutation):
             id=generateID(),
             name=data.name,
             initialValue=data.initialValue,
+            user_id=info.context.user.id,
         )
         node_instance.save()
         return NodeCreate(node=node_instance)

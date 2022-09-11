@@ -13,6 +13,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    location = models.CharField(max_length=255, default="")
 
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
@@ -21,4 +22,4 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     def __str__(self):
-        return f"{self.email}"
+        return f"{self.first_name} {self.last_name}"

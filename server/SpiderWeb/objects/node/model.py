@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
-from SpiderWeb.models.utils.fetch_model import fetch_model
-from SpiderWeb.models.utils.model_names import Name
+from SpiderWeb.helpers import fetch_model, Name
 
 
 class NodeModel(models.Model):
@@ -11,6 +10,9 @@ class NodeModel(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     initialValue = models.FloatField(default=1.0)
+
+    def __str__(self) -> str:
+        return self.name
 
     def calculateGrossValue(self) -> float:
         return self.initialValue + sum(
@@ -41,6 +43,3 @@ class NodeModel(models.Model):
 
     def getEdges(self):
         return self.getIncomingEdges() | self.getOutgoingEdges()
-
-    def __str__(self) -> str:
-        return self.name

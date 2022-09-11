@@ -3,9 +3,11 @@ import graphql_jwt
 from graphql import GraphQLError
 
 from SpiderWeb.objects.node.query import NodeQuery
-from SpiderWeb.objects.node.mutation import NodeMutation
 from SpiderWeb.objects.edge.query import EdgeQuery
+
 from SpiderWeb.objects.edge.mutation import EdgeMutation
+from SpiderWeb.objects.node.mutation import NodeMutation
+
 from .objects.user.schema import *
 
 
