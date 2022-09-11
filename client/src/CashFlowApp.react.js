@@ -4,6 +4,7 @@ import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
+import { useNavigate } from "react-router-dom";
 
 const GET_DATA = gql`
   query GetData {
@@ -29,7 +30,11 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default ({}) => {
+export default ({ user }) => {
+  const navigate = useNavigate();
+  if (!user) {
+    navigate("/login");
+  }
   const { loading, error, data } = useQuery(GET_DATA);
   if (loading) {
     return <p>Loading...</p>;
