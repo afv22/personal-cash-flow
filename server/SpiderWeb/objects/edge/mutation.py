@@ -40,7 +40,7 @@ class EdgeCreate(graphene.Mutation):
             sourcePercentage=data.sourcePercentage,
             sourceAmount=data.sourceAmount,
             sourceRemainingBalance=data.sourceRemainingBalance,
-            user_id=info.context.user.id,
+            # user_id=info.context.user.id,
         )
         instance.save()
         return EdgeCreate(edge=instance)
