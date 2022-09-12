@@ -5,7 +5,7 @@ from SpiderWeb.helpers import fetch_model, calculateRealTaxRate, Name
 
 class EdgeModel(models.Model):
     id = models.PositiveBigIntegerField(primary_key=True)
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sourceId = models.PositiveBigIntegerField()
     targetId = models.PositiveBigIntegerField()
     isTaxable = models.BooleanField(default=False)

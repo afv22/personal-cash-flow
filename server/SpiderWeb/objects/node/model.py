@@ -7,7 +7,7 @@ class NodeModel(models.Model):
     # Each variable represents a database field
     # The var name must match the column name in the database
     id = models.PositiveBigIntegerField(primary_key=True)
-    # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     initialValue = models.FloatField(default=1.0)
 

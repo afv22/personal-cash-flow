@@ -18,11 +18,12 @@ class NodeCreate(graphene.Mutation):
 
     @staticmethod
     def mutate(root, info, data=None):
+        print(info.context.user)
         node_instance = NodeModel(
             id=generateID(),
             name=data.name,
             initialValue=data.initialValue,
-            # user_id=info.context.user.id,
+            user_id=info.context.user.id,
         )
         node_instance.save()
         return NodeCreate(node=node_instance)
