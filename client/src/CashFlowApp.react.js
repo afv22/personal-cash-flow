@@ -2,18 +2,19 @@ import React, { createContext } from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
+import { AUTH_TOKEN } from "./constants";
 
 const GET_DATA = gql`
   query GetData {
-    allNodes {
+    userNodes {
       id
       name
       initialValue
       netValue
     }
-    allEdges {
+    userEdges {
       id
       sourceId
       targetId
@@ -29,7 +30,7 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default ({}) => {
+export default ({ setToken }) => {
   const { loading, error, data } = useQuery(GET_DATA);
   if (loading) {
     return <p>Loading...</p>;
@@ -49,9 +50,12 @@ export default ({}) => {
         <Typography variant="h2" marginTop={15}>
           Cash Flow
         </Typography>
+        <Button variant="outlined" onClick={() => setToken(null)}>
+          Logout
+        </Button>
         <SankeyDiagram data={data} />
         <Grid item>
-          <AccountList nodes={data.allNodes} />
+          <AccountList nodes={data.userNodes} />
         </Grid>
         <Grid item>
           <EdgeList data={data} />

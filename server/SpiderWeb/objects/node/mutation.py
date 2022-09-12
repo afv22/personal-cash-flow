@@ -2,22 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from SpiderWeb.helpers import generateID
 from .model import NodeModel
-
-
-class NodeType(DjangoObjectType):
-    class Meta:
-        model = NodeModel
-        fields = "__all__"
-
-    gross_value = graphene.Float(required=True, node_id=graphene.ID())
-
-    def resolve_gross_value(self, info):
-        return NodeModel.objects.get(pk=self.id).calculateGrossValue()
-
-    net_value = graphene.Float(required=True, node_id=graphene.ID())
-
-    def resolve_net_value(self, info):
-        return NodeModel.objects.get(pk=self.id).calculateNetValue()
+from .type import NodeType
 
 
 class NodeInput(graphene.InputObjectType):
@@ -33,11 +18,12 @@ class NodeCreate(graphene.Mutation):
 
     @staticmethod
     def mutate(root, info, data=None):
+        print(info.context.user)
         node_instance = NodeModel(
             id=generateID(),
             name=data.name,
             initialValue=data.initialValue,
-            # user_id=info.context.user.id,
+            user_id=info.context.user.id,
         )
         node_instance.save()
         return NodeCreate(node=node_instance)

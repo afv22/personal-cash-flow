@@ -19,40 +19,36 @@ def generateID():
     return random.randint(100000, 999999)
 
 
-def calculateFederalTaxes(taxableValue) -> float:
-    if taxableValue < 0:
-        return 0
-    if taxableValue < 9950:
-        return taxableValue * 0.1
-    if taxableValue < 40525:
-        return 995 + (taxableValue - 9950) * 0.12
-    if taxableValue < 86375:
-        return 4664 + (taxableValue - 40525) * 0.22
-    if taxableValue < 164925:
-        return 14751 + (taxableValue - 86375) * 0.24
-    if taxableValue < 209425:
-        return 33603 + (taxableValue - 164925) * 0.32
-    if taxableValue < 523600:
-        return 47843 + (taxableValue - 209425) * 0.35
-    return 157804 + (taxableValue - 523600) * 0.37
+federalTaxBrackets = [
+    (0, 0),
+    (0.1, 9950),
+    (0.12, 40525),
+    (0.22, 86375),
+    (0.24, 164925),
+    (0.32, 209425),
+    (0.35, 523600),
+    (0.37, float("inf")),
+]
+
+DCTaxBrackets = [
+    (0, 0),
+    (0.04, 10000),
+    (0.06, 40000),
+    (0.065, 60000),
+    (0.085, 250000),
+    (0.0925, 500000),
+    (0.975, 1000000),
+    (0.1075, float("inf")),
+]
 
 
-def calculateStateTaxes(taxableValue) -> float:
-    if taxableValue < 0:
-        return 0
-    if taxableValue < 10000:
-        return taxableValue * 0.04
-    if taxableValue < 40000:
-        return 400 + (taxableValue - 10000) * 0.06
-    if taxableValue < 60000:
-        return 2200 + (taxableValue - 40000) * 0.065
-    if taxableValue < 250000:
-        return 3500 + (taxableValue - 60000) * 0.085
-    if taxableValue < 500000:
-        return 19650 + (taxableValue - 250000) * 0.0925
-    if taxableValue < 1000000:
-        return 42775 + (taxableValue - 500000) * 0.0975
-    return 91525 + (taxableValue - 1000000) * 0.1075
+def calculateTieredTaxes(taxableValue, taxBrackets) -> float:
+    return sum(
+        [
+            rate * max(0, min(cap, taxableValue) - taxBrackets[i - 1][1])
+            for i, (rate, cap) in enumerate(taxBrackets)
+        ]
+    )
 
 
 def calculateRealTaxRate() -> float:
@@ -62,8 +58,8 @@ def calculateRealTaxRate() -> float:
             fetch_model(Name.EDGE.value).objects.filter(isTaxable=True),
         )
     )
-    federalTaxes = calculateFederalTaxes(taxableValue)
-    stateTaxes = calculateStateTaxes(taxableValue)
+    federalTaxes = calculateTieredTaxes(taxableValue, federalTaxBrackets)
+    stateTaxes = calculateTieredTaxes(taxableValue, DCTaxBrackets)
     medicareTaxes = taxableValue * 0.0145
     socSecTaxes = taxableValue * 0.062
     totalTaxes = sum([federalTaxes, stateTaxes, medicareTaxes, socSecTaxes])

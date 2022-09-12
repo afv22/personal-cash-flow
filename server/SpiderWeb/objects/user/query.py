@@ -1,7 +1,6 @@
 import graphene
-import graphql_jwt
-from graphql import GraphQLError
 from .type import UserType
+from graphql import GraphQLError
 
 
 class UserQuery(graphene.ObjectType):

@@ -1,5 +1,4 @@
 import graphene
-from graphene_django import DjangoObjectType
 from .model import UserModel
 from .type import UserType
 

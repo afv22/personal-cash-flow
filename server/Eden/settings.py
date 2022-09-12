@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "graphene_django",
+    "graphql_auth",
+    "django_filters",
     "corsheaders",
     "SpiderWeb",
 ]
@@ -81,7 +83,7 @@ WSGI_APPLICATION = "Eden.wsgi.application"
 AUTH_USER_MODEL = "SpiderWeb.UserModel"
 
 AUTHENTICATION_BACKENDS = [
-    "graphql_jwt.backends.JSONWebTokenBackend",
+    "graphql_auth.backends.GraphQLAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -99,9 +101,7 @@ DATABASES = {
 
 GRAPHENE = {
     "SCHEMA": "SpiderWeb.schema.schema",
-    "MIDDLEWARE": [
-        "graphql_jwt.middleware.JSONWebTokenMiddleware",
-    ],
+    "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
 }
 
 
