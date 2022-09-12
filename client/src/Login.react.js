@@ -53,7 +53,7 @@ export default ({ setToken }) => {
     } catch (error) {
       console.error(error);
     }
-    localStorage.setItem(AUTH_TOKEN, response.data.tokenAuth.token);
+    setToken(response.data.tokenAuth.token);
   };
 
   useEffect(() => {

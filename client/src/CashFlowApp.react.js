@@ -30,7 +30,7 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default ({}) => {
+export default ({ setToken }) => {
   const { loading, error, data } = useQuery(GET_DATA);
   if (loading) {
     return <p>Loading...</p>;
@@ -50,10 +50,7 @@ export default ({}) => {
         <Typography variant="h2" marginTop={15}>
           Cash Flow
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={() => localStorage.setItem(AUTH_TOKEN, null)}
-        >
+        <Button variant="outlined" onClick={() => setToken(null)}>
           Logout
         </Button>
         <SankeyDiagram data={data} />
