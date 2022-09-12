@@ -7,9 +7,7 @@ import { DataQueryContext } from "../CashFlowApp.react";
 const DELETE_EDGE = gql`
   mutation DeleteEdge($id: ID!) {
     deleteEdge(id: $id) {
-      edge {
-        id
-      }
+      success
     }
   }
 `;

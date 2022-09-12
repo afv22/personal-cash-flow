@@ -45,8 +45,8 @@ export default ({ data }) => {
 
   useEffect(() => {
     const [newLabels, newSources, newTargets, newValues] = translate(
-      data.allNodes,
-      data.allEdges
+      data.userNodes,
+      data.userEdges
     );
     setLabels(newLabels);
     setSources(newSources);

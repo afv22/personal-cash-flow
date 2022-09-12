@@ -8,13 +8,13 @@ import { AUTH_TOKEN } from "./constants";
 
 const GET_DATA = gql`
   query GetData {
-    allNodes {
+    userNodes {
       id
       name
       initialValue
       netValue
     }
-    allEdges {
+    userEdges {
       id
       sourceId
       targetId
@@ -55,7 +55,7 @@ export default ({ setToken }) => {
         </Button>
         <SankeyDiagram data={data} />
         <Grid item>
-          <AccountList nodes={data.allNodes} />
+          <AccountList nodes={data.userNodes} />
         </Grid>
         <Grid item>
           <EdgeList data={data} />

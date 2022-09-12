@@ -7,9 +7,7 @@ import { DataQueryContext } from "../CashFlowApp.react";
 const DELETE_NODE = gql`
   mutation DeleteNode($id: ID!) {
     deleteNode(id: $id) {
-      node {
-        id
-      }
+      success
     }
   }
 `;

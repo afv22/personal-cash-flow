@@ -53,9 +53,9 @@ const getColumns = () => {
 const getRows = (data) => {
   const accountNames = Object.assign(
     {},
-    ...data.allNodes.map((node) => ({ [node.id]: node.name }))
+    ...data.userNodes.map((node) => ({ [node.id]: node.name }))
   );
-  return data.allEdges.map((edge) => {
+  return data.userEdges.map((edge) => {
     var rowData = {
       id: edge.id,
       source: accountNames[edge.sourceId],
