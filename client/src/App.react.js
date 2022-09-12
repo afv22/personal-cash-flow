@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CashFlowApp from "./CashFlowApp.react";
-import {} from "./constants";
 import LoginReact from "./Login.react";
-
+import { AUTH_TOKEN, GRAPHQL_ENDPOINT_URL } from "./constants";
 import {
   ApolloProvider,
   ApolloClient,
@@ -10,10 +9,17 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { GRAPHQL_ENDPOINT_URL } from "./constants";
 
 export default ({}) => {
-  const [token, setToken] = useState(null);
+  const [token, _setToken] = useState("");
+  const setToken = (newToken) => {
+    localStorage.setItem(AUTH_TOKEN, newToken);
+    _setToken(newToken);
+  };
+
+  useEffect(() => {
+    _setToken(localStorage.getItem(AUTH_TOKEN));
+  }, []);
 
   const httpLink = createHttpLink({
     uri: GRAPHQL_ENDPOINT_URL,
@@ -35,7 +41,7 @@ export default ({}) => {
 
   return (
     <ApolloProvider client={client}>
-      {token ? (
+      {token != "" ? (
         <CashFlowApp setToken={setToken} />
       ) : (
         <LoginReact setToken={setToken} />

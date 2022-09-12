@@ -4,7 +4,6 @@ import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Button, Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
-import { AUTH_TOKEN } from "./constants";
 
 const GET_DATA = gql`
   query GetData {
@@ -50,7 +49,7 @@ export default ({ setToken }) => {
         <Typography variant="h2" marginTop={15}>
           Cash Flow
         </Typography>
-        <Button variant="outlined" onClick={() => setToken(null)}>
+        <Button variant="outlined" onClick={() => setToken("")}>
           Logout
         </Button>
         <SankeyDiagram data={data} />
