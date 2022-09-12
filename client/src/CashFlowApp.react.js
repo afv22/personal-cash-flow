@@ -1,10 +1,12 @@
-import React, { createContext } from "react";
+import React, { createContext, useContext } from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
 import { useNavigate } from "react-router-dom";
+import { AUTH_TOKEN } from "./constants";
+import { UserContext } from "./App.react";
 
 const GET_DATA = gql`
   query GetData {
@@ -30,11 +32,12 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default ({ user }) => {
-  const navigate = useNavigate();
-  if (!user) {
-    navigate("/login");
-  }
+export default ({}) => {
+  // const navigate = useNavigate();
+  // if (!localStorage.getItem(AUTH_TOKEN)) {
+  //   navigate("/login");
+  // }
+  const user = useContext(UserContext).user;
   const { loading, error, data } = useQuery(GET_DATA);
   if (loading) {
     return <p>Loading...</p>;
@@ -44,6 +47,9 @@ export default ({ user }) => {
 
   return (
     <DataQueryContext.Provider value={GET_DATA}>
+      <Typography variant="subtitle1">
+        User: {user.firstName} {user.lastName}
+      </Typography>
       <Grid
         container
         direction="column"

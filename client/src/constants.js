@@ -1,3 +1,5 @@
 const AUTH_TOKEN = "auth-token";
 
-export { AUTH_TOKEN };
+const GRAPHQL_ENDPOINT_URL = "http://localhost:8000/graphql/";
+
+export { AUTH_TOKEN, GRAPHQL_ENDPOINT_URL };

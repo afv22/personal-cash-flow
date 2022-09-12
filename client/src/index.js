@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import CashFlowApp from "./CashFlowApp.react";
+import App from "./App.react";
 import {
   ApolloProvider,
   ApolloClient,
@@ -8,10 +8,10 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { AUTH_TOKEN } from "./constants";
+import { AUTH_TOKEN, GRAPHQL_ENDPOINT_URL } from "./constants";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:8000/graphql/",
+  uri: GRAPHQL_ENDPOINT_URL,
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -19,7 +19,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      Authorization: token ? `JWT ${token}` : "",
     },
   };
 });
@@ -33,7 +33,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <CashFlowApp />
+      <App />
     </ApolloProvider>
   </React.StrictMode>
 );

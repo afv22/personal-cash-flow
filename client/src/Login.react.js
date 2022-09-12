@@ -37,6 +37,7 @@ const VERIFY_TOKEN = gql`
 const theme = createTheme();
 
 export default ({ setToken, setUser }) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
@@ -56,8 +57,8 @@ export default ({ setToken, setUser }) => {
       console.error(error);
     }
     localStorage.setItem(AUTH_TOKEN, response.data.tokenAuth.token);
-    // navigate("/");
-    setUser(1);
+    console.log(response.data.tokenAuth);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -65,8 +66,8 @@ export default ({ setToken, setUser }) => {
       const token = localStorage.getItem(AUTH_TOKEN);
       const payload = await verifyToken({ variables: { token: token } });
       if (payload.data.verifyToken.payload !== null) {
-        // navigate("/");
-        setUser(1);
+        console.log(payload.data.verifyToken.payload);
+        navigate("/");
       }
     };
     func();
