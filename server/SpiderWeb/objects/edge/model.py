@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from SpiderWeb.helpers import fetch_model, calculateRealTaxRate, Name
+from SpiderWeb.helpers import fetch_model, Name
 
 
 class EdgeModel(models.Model):
@@ -29,7 +29,7 @@ class EdgeModel(models.Model):
     def calculateTaxes(self) -> float:
         if not self.isTaxable:
             return 0
-        return self.calculateGrossValue() * calculateRealTaxRate()
+        return self.calculateGrossValue() * self.user.calculateRealTaxRate()
 
     def calculateNetValue(self) -> float:
         return self.calculateGrossValue() - self.calculateTaxes()

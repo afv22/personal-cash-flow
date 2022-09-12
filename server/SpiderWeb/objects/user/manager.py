@@ -4,8 +4,10 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None, **kwargs):
+    def create_user(self, username, password, **kwargs):
         """Create and return a `User` with an email, phone number, username and password."""
+        if password is None:
+            raise TypeError("Superusers must have a password.")
         if username is None:
             raise TypeError("Users must have a username.")
 
