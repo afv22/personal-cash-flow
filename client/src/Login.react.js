@@ -19,8 +19,6 @@ import { useNavigate } from "react-router-dom";
 const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
     tokenAuth(username: $username, password: $password) {
-      payload
-      refreshExpiresIn
       token
     }
   }
@@ -36,8 +34,7 @@ const VERIFY_TOKEN = gql`
 
 const theme = createTheme();
 
-export default ({ setToken, setUser }) => {
-  const navigate = useNavigate();
+export default ({ setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
@@ -57,8 +54,6 @@ export default ({ setToken, setUser }) => {
       console.error(error);
     }
     localStorage.setItem(AUTH_TOKEN, response.data.tokenAuth.token);
-    console.log(response.data.tokenAuth);
-    navigate("/");
   };
 
   useEffect(() => {
@@ -67,7 +62,6 @@ export default ({ setToken, setUser }) => {
       const payload = await verifyToken({ variables: { token: token } });
       if (payload.data.verifyToken.payload !== null) {
         console.log(payload.data.verifyToken.payload);
-        navigate("/");
       }
     };
     func();
