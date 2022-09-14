@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { gql, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./App.react";
+import AuthContext from "./AuthContext";
 
 const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
@@ -28,7 +28,7 @@ const theme = createTheme();
 
 export default ({}) => {
   const navigate = useNavigate();
-  const isAuth = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
@@ -46,10 +46,10 @@ export default ({}) => {
     } catch (error) {
       console.error(error);
     }
-    isAuth.setToken(response.data.tokenAuth.token);
+    auth.setToken(response.data.tokenAuth.token);
   };
 
-  if (isAuth.isAuth) {
+  if (auth.isAuth) {
     navigate("/");
   }
 

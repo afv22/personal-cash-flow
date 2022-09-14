@@ -1,6 +1,6 @@
-import React, { useEffect, useState, createContext } from "react";
-import Login from "./Login.react";
-import Signup from "./Signup.react";
+import React, { useEffect, useState } from "react";
+import LoginPage from "./auth/Login.react";
+import SignupPage from "./auth/Signup.react";
 import { AUTH_TOKEN, GRAPHQL_ENDPOINT_URL } from "./constants";
 import { setContext } from "@apollo/client/link/context";
 import {
@@ -11,8 +11,7 @@ import {
 } from "@apollo/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppPageReact from "./AppPage.react";
-
-const AuthContext = createContext();
+import AuthContext from "./auth/AuthContext";
 
 export default ({}) => {
   const [token, _setToken] = useState("");
@@ -57,8 +56,8 @@ export default ({}) => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AppPageReact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Signup />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<SignupPage />} />
           </Routes>
         </BrowserRouter>
       </AuthContext.Provider>

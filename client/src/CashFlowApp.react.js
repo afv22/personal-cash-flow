@@ -1,11 +1,10 @@
-import React, { useContext, createContext, useEffect } from "react";
+import React, { useContext, createContext } from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { Button, Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./App.react";
+import AuthContext from "./auth/AuthContext";
 
 const GET_DATA = gql`
   query GetData {
