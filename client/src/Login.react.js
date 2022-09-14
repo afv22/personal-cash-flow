@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,8 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { gql, useMutation } from "@apollo/client";
-import { AUTH_TOKEN } from "./constants";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./App.react";
 
 const LOGIN = gql`
   mutation Login($username: String!, $password: String!) {
@@ -24,21 +24,14 @@ const LOGIN = gql`
   }
 `;
 
-const VERIFY_TOKEN = gql`
-  mutation VerifyToken($token: String!) {
-    verifyToken(token: $token) {
-      payload
-    }
-  }
-`;
-
 const theme = createTheme();
 
-export default ({ setToken }) => {
+export default ({}) => {
+  const navigate = useNavigate();
+  const isAuth = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
-  const [verifyToken, _verifyTokenResult] = useMutation(VERIFY_TOKEN);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -53,19 +46,12 @@ export default ({ setToken }) => {
     } catch (error) {
       console.error(error);
     }
-    setToken(response.data.tokenAuth.token);
+    isAuth.setToken(response.data.tokenAuth.token);
   };
 
-  useEffect(() => {
-    const func = async () => {
-      const token = localStorage.getItem(AUTH_TOKEN);
-      const payload = await verifyToken({ variables: { token: token } });
-      if (payload.data.verifyToken.payload !== null) {
-        console.log(payload.data.verifyToken.payload);
-      }
-    };
-    func();
-  }, []);
+  if (isAuth.token !== "") {
+    navigate("/");
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -132,7 +118,7 @@ export default ({ setToken }) => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>

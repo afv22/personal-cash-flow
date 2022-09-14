@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from "react";
-import CashFlowApp from "./CashFlowApp.react";
-import LoginReact from "./Login.react";
+import React, { useEffect, useState, createContext } from "react";
+import Login from "./Login.react";
+import Signup from "./Signup.react";
 import { AUTH_TOKEN, GRAPHQL_ENDPOINT_URL } from "./constants";
+import { setContext } from "@apollo/client/link/context";
 import {
   ApolloProvider,
   ApolloClient,
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AppPageReact from "./AppPage.react";
+
+const AuthContext = createContext();
 
 export default ({}) => {
   const [token, _setToken] = useState("");
+
   const setToken = (newToken) => {
     localStorage.setItem(AUTH_TOKEN, newToken);
     _setToken(newToken);
@@ -20,6 +25,12 @@ export default ({}) => {
   useEffect(() => {
     _setToken(localStorage.getItem(AUTH_TOKEN));
   }, []);
+
+  const logout = () => {
+    setToken("");
+  };
+
+  // Create Apollo Client
 
   const httpLink = createHttpLink({
     uri: GRAPHQL_ENDPOINT_URL,
@@ -41,11 +52,17 @@ export default ({}) => {
 
   return (
     <ApolloProvider client={client}>
-      {token != "" ? (
-        <CashFlowApp setToken={setToken} />
-      ) : (
-        <LoginReact setToken={setToken} />
-      )}
+      <AuthContext.Provider value={{ token, logout, setToken }}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<AppPageReact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthContext.Provider>
     </ApolloProvider>
   );
 };
+
+export { AuthContext };
