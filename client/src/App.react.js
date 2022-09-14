@@ -16,6 +16,7 @@ const AuthContext = createContext();
 
 export default ({}) => {
   const [token, _setToken] = useState("");
+  const isAuth = token !== "";
 
   const setToken = (newToken) => {
     localStorage.setItem(AUTH_TOKEN, newToken);
@@ -52,7 +53,7 @@ export default ({}) => {
 
   return (
     <ApolloProvider client={client}>
-      <AuthContext.Provider value={{ token, logout, setToken }}>
+      <AuthContext.Provider value={{ isAuth, logout, setToken }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<AppPageReact />} />

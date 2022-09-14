@@ -30,7 +30,7 @@ export default function SignUp() {
     });
   };
 
-  if (isAuth.token !== "") {
+  if (isAuth.isAuth) {
     navigate("/");
   }
 

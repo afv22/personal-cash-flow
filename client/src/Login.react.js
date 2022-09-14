@@ -49,7 +49,7 @@ export default ({}) => {
     isAuth.setToken(response.data.tokenAuth.token);
   };
 
-  if (isAuth.token !== "") {
+  if (isAuth.isAuth) {
     navigate("/");
   }
 

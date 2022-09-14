@@ -8,7 +8,7 @@ export default ({}) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  if (auth.token === "") {
+  if (!auth.isAuth) {
     return (
       <Button variant="contained" onClick={() => navigate("/login")}>
         Login
