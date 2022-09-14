@@ -8,13 +8,11 @@ export default ({}) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  if (!auth.isAuth) {
-    return (
-      <Button variant="contained" onClick={() => navigate("/login")}>
-        Login
-      </Button>
-    );
-  }
-
-  return <CashFlowAppReact />;
+  return auth.isAuth ? (
+    <CashFlowAppReact />
+  ) : (
+    <Button variant="contained" onClick={() => navigate("/login")}>
+      Login
+    </Button>
+  );
 };
