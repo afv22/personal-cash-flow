@@ -6,6 +6,7 @@ from .type import UserType
 class UserInput(graphene.InputObjectType):
     username = graphene.String(required=True)
     password = graphene.String(required=True)
+    email = graphene.String(required=False)
     first_name = graphene.String(required=False)
     last_name = graphene.String(required=False)
 

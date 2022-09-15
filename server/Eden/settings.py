@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -102,6 +103,42 @@ DATABASES = {
 GRAPHENE = {
     "SCHEMA": "SpiderWeb.schema.schema",
     "MIDDLEWARE": ["graphql_jwt.middleware.JSONWebTokenMiddleware"],
+}
+
+GRAPHQL_JWT = {
+    "JWT_ALLOW_ANY_CLASSES": [
+        "graphql_auth.mutations.Register",
+    ],
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+GRAPHQL_AUTH = {
+    "USERNAME_FIELD": ["username"],  # Same as USERNAME_FIELD in User model
+    "LOGIN_ALLOWED_FIELDS": ["username", "email"],
+    "USER_NODE_FILTER_FIELDS": {
+        "email": [
+            "exact",
+        ],
+        "is_active": ["exact"],
+        "status__archived": ["exact"],
+        "status__verified": ["exact"],
+        "status__secondary_email": ["exact"],
+    },
+    "REGISTER_MUTATION_FIELDS": [
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+    ],  # extend with your fields: city, date_of_birth, company
+    "REGISTER_MUTATION_FIELDS_OPTIONAL": ["state"],
+    "EMAIL_TEMPLATE_PASSWORD_RESET": "email/account_password_reset_email.html",  # My modified template route
+    "EMAIL_TEMPLATE_ACTIVATION": "email/account_activation_email.html",  # My modified template route
+    "EMAIL_SUBJECT_ACTIVATION": "email/account_activation_subject.txt",  # My modified subject route
+    "EMAIL_SUBJECT_PASSWORD_RESET": "email/account_password_reset_subject.txt",  # My modified subject route
+    "SEND_ACTIVATION_EMAIL": False,  # A boolean parameter if you want activation or not
+    "ALLOW_LOGIN_NOT_VERIFIED": False,
+    "EXPIRATION_PASSWORD_RESET_TOKEN": timedelta(hours=1),
 }
 
 

@@ -1,5 +1,6 @@
 import graphene
 import graphql_jwt
+from graphql_auth import mutations
 
 from SpiderWeb.objects.node.query import NodeQuery
 from SpiderWeb.objects.edge.query import EdgeQuery
@@ -15,6 +16,7 @@ class Query(EdgeQuery, NodeQuery, UserQuery, graphene.ObjectType):
 
 
 class Mutation(EdgeMutation, NodeMutation, UserMutation, graphene.ObjectType):
+    register = mutations.Register.Field()
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
