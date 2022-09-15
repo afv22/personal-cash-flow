@@ -11,7 +11,7 @@ const translate = (nodes, edges) => {
   var targets = [];
   var values = [];
 
-  nodes.map((node, index) => {
+  nodes.forEach((node, index) => {
     labels.push(node.name);
     idToIndex[node.id] = index + 2;
     if (node.initialValue > 0) {
@@ -21,7 +21,7 @@ const translate = (nodes, edges) => {
     }
   });
 
-  edges.map((edge) => {
+  edges.forEach((edge) => {
     sources.push(idToIndex[edge.sourceId]);
     targets.push(idToIndex[edge.targetId]);
     if (edge.isTaxable) {

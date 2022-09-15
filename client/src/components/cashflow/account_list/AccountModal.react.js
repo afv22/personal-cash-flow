@@ -1,7 +1,7 @@
 import { Grid, TextField, Divider } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import Modal, { ModalButton } from "../components/Modal.react";
+import Modal, { ModalButton } from "components/cashflow/Modal.react";
 
 const CREATE_NODE = gql`
   mutation CreateNode($name: String!, $initialValue: Float!) {
@@ -27,13 +27,13 @@ export default ({ open, setOpen, getDataQuery }) => {
   };
 
   const handleSubmit = () => {
-    if (name == "") {
+    if (name === "") {
       return;
     }
     createNode({
       variables: {
         name: name,
-        initialValue: parseFloat(initialValue != "" ? initialValue : 0),
+        initialValue: parseFloat(initialValue !== "" ? initialValue : 0),
       },
     });
     closeModal();

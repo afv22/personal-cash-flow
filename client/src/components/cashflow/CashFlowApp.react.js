@@ -4,7 +4,7 @@ import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Button, Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
-import AuthContext from "./auth/AuthContext";
+import AuthContext from "components/auth/AuthContext";
 
 const GET_DATA = gql`
   query GetData {
@@ -30,7 +30,7 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default ({}) => {
+export default () => {
   const auth = useContext(AuthContext);
   const { loading, error, data } = useQuery(GET_DATA);
 

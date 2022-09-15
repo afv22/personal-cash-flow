@@ -3,7 +3,7 @@ import { gql, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
 import { getColumns, getRows } from "./utils/processEdges";
 import { processRowUpdate, onProcessRowUpdateError } from "./utils/rowUpdate";
-import DataList from "../components/DataList.react";
+import DataList from "../DataList.react";
 import { DataQueryContext } from "../CashFlowApp.react";
 
 const UPDATE_EDGE = gql`

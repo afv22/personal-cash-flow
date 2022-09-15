@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import Modal, { ModalButton } from "../components/Modal.react";
+import Modal, { ModalButton } from "../Modal.react";
 
 const CREATE_EDGE_FORM_GET_ACCOUNT_NAMES = gql`
   query CreateEdgeFromGetAccountNames {
@@ -80,7 +80,7 @@ export default ({ open, setOpen, getDataQuery }) => {
   };
 
   const handleSubmit = () => {
-    if (source == "" || target == "") {
+    if (source === "" || target === "") {
       return;
     }
     createEdge({
@@ -88,9 +88,9 @@ export default ({ open, setOpen, getDataQuery }) => {
         sourceID: source,
         targetID: target,
         isTaxable: edgeIsTaxable,
-        sourcePercentage: edgeType == 0 ? parseFloat(edgeValue) : 0,
-        sourceAmount: edgeType == 1 ? parseFloat(edgeValue) : 0,
-        sourceRemainingBalance: edgeType == 2,
+        sourcePercentage: edgeType === 0 ? parseFloat(edgeValue) : 0,
+        sourceAmount: edgeType === 1 ? parseFloat(edgeValue) : 0,
+        sourceRemainingBalance: edgeType === 2,
       },
     });
     closeModal();
@@ -146,7 +146,7 @@ export default ({ open, setOpen, getDataQuery }) => {
           </Grid>
           <Grid item>
             <TextField
-              disabled={edgeType == 2}
+              disabled={edgeType === 2}
               style={inputStyle}
               label={["%", "$", ""][edgeType]}
               variant="outlined"

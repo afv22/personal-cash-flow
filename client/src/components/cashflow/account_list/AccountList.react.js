@@ -3,8 +3,8 @@ import AccountModal from "./AccountModal.react";
 import { gql, useMutation } from "@apollo/client";
 import { getRows, getColumns } from "./utils/processNodes";
 import { processRowUpdate, onProcessRowUpdateError } from "./utils/rowUpdate";
-import DataList from "../components/DataList.react";
-import { DataQueryContext } from "../CashFlowApp.react";
+import DataList from "../DataList.react";
+import { DataQueryContext } from "components/cashflow/CashFlowApp.react";
 
 const UPDATE_NODE = gql`
   mutation UpdateNode($id: ID!, $name: String!, $initialValue: Float!) {

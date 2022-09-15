@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { GRAPHQL_ENDPOINT_URL } from "./constants";
+import { GRAPHQL_ENDPOINT_URL } from "../constants";
 import { setContext } from "@apollo/client/link/context";
 import {
   ApolloProvider,
@@ -7,7 +7,7 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import { AUTH_TOKEN } from "./constants";
+import { AUTH_TOKEN } from "../constants";
 
 const TokenContext = createContext();
 

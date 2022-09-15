@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import LoginPage from "./auth/Login.react";
 import SignupPage from "./auth/Signup.react";
-import { AUTH_TOKEN } from "./constants";
+import { AUTH_TOKEN } from "../constants";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppPage from "./AppPage.react";
 import AuthContext from "./auth/AuthContext";
@@ -16,7 +16,7 @@ const VERIFY_TOKEN = gql`
   }
 `;
 
-export default ({}) => {
+export default () => {
   const { token, setNewToken } = useContext(TokenContext);
   const [isAuth, setIsAuth] = useState(false);
   const [verifyToken, { data }] = useMutation(VERIFY_TOKEN);
@@ -32,7 +32,7 @@ export default ({}) => {
 
   useEffect(() => {
     verifyToken({ variables: { token: token } });
-  }, [token]);
+  }, [token, verifyToken]);
 
   useEffect(() => {
     setIsAuth(data !== undefined);

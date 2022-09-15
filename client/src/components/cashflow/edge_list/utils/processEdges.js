@@ -1,5 +1,5 @@
 import React from "react";
-import DeleteEdgeButton from "./../DeleteEdgeButton.react";
+import DeleteEdgeButton from "../DeleteEdgeButton.react";
 
 const edgeTypes = ["Percentage", "Amount", "Balance"];
 

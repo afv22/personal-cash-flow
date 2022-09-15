@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { gql, useMutation } from "@apollo/client";
-import { DataQueryContext } from "../CashFlowApp.react";
+import { DataQueryContext } from "components/cashflow/CashFlowApp.react";
 
 const DELETE_NODE = gql`
   mutation DeleteNode($id: ID!) {

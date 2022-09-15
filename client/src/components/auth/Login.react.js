@@ -26,7 +26,7 @@ const LOGIN = gql`
 
 const theme = createTheme();
 
-export default ({}) => {
+export default () => {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
   const [username, setUsername] = useState("");
