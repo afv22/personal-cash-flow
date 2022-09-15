@@ -15,8 +15,11 @@ class EdgeModel(models.Model):
     sourceAmount = models.FloatField(default=0)
     sourceRemainingBalance = models.BooleanField(default=False)
 
+    def _fetchNodeName(self, id):
+        return fetch_model(Name.NODE.value).objects.get(pk=id).name
+
     def __str__(self) -> str:
-        return f"{self.sourceId} - {self.targetId}"
+        return f"{self._fetchNodeName(self.sourceId)} - {self._fetchNodeName(self.targetId)}"
 
     def calculateGrossValue(self) -> float:
         sourceNode = fetch_model(Name.NODE.value).objects.get(pk=self.sourceId)
