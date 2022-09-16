@@ -1,10 +1,10 @@
-import React, { useContext, createContext } from "react";
+import React, { createContext, useContext } from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
-import AuthContext from "components/auth/AuthContext";
+import { AuthContext } from "components/App.react";
 
 const GET_DATA = gql`
   query GetData {
@@ -52,9 +52,6 @@ export default () => {
         <Typography variant="h2" marginTop={15}>
           Cash Flow
         </Typography>
-        <Button variant="outlined" onClick={auth.logout}>
-          Logout
-        </Button>
         <SankeyDiagram data={data} />
         <Grid item>
           <AccountList nodes={data.userNodes} />

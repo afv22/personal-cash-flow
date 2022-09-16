@@ -31,6 +31,9 @@ export default () => {
   };
 
   useEffect(() => {
+    if (token == null) {
+      return;
+    }
     verifyToken({ variables: { token: token } });
   }, [token, verifyToken]);
 

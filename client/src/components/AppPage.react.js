@@ -1,18 +1,22 @@
-import React, { useContext } from "react";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./App.react";
-import CashFlowAppReact from "./cashflow/CashFlowApp.react";
+import React, { useContext, useState } from "react";
+import { Button, Drawer } from "@mui/material";
+import { Menu } from "@mui/icons-material";
+import SideMenu from "./SideMenu.react";
+import CashFlowApp from "./cashflow/CashFlowApp.react";
 
 export default () => {
-  const auth = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleDrawer = setIsOpen;
 
-  return auth.isAuth ? (
-    <CashFlowAppReact />
-  ) : (
-    <Button variant="contained" onClick={() => navigate("/login")}>
-      Login
-    </Button>
+  return (
+    <React.Fragment>
+      <Button onClick={() => toggleDrawer(true)}>
+        <Menu />
+      </Button>
+      <CashFlowApp />
+      <Drawer anchor="left" open={isOpen} onClose={() => toggleDrawer(false)}>
+        <SideMenu toggleDrawer={toggleDrawer} />
+      </Drawer>
+    </React.Fragment>
   );
 };
