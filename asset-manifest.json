@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/personal-finance-viz/static/js/main.91dac11d.js",
+    "index.html": "/personal-finance-viz/index.html",
+    "main.91dac11d.js.map": "/personal-finance-viz/static/js/main.91dac11d.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.91dac11d.js"
+  ]
+}
