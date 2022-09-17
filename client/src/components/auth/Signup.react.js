@@ -39,9 +39,7 @@ const REGISTER_USER = gql`
 
 const theme = createTheme();
 
-export default function SignUp() {
-  const navigate = useNavigate();
-  const isAuth = useContext(AuthContext);
+export default ({ toggleForm }) => {
   const [registerUser, _] = useMutation(REGISTER_USER);
 
   const [firstName, setFirstName] = useState("");
@@ -50,8 +48,6 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
-
-  const fields = [firstName, lastName, username, email, password1, password2];
 
   const [passwordsMismatch, setPasswordsMismatch] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -69,15 +65,12 @@ export default function SignUp() {
       },
     });
 
-    console.log(fields);
-    console.log(response);
-
     if (response.error) {
       console.log(response.error);
       return;
     }
 
-    navigate("/login");
+    toggleForm();
   };
 
   useEffect(() => {
@@ -87,10 +80,6 @@ export default function SignUp() {
       ) || passwordsMismatch
     );
   }, [firstName, lastName, username, email, password1, password2]);
-
-  if (isAuth.isAuth) {
-    navigate("/");
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -213,9 +202,9 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Button onClick={toggleForm} style={{ textTransform: "none" }}>
                   Already have an account? Sign in
-                </Link>
+                </Button>
               </Grid>
             </Grid>
           </Box>
@@ -223,4 +212,4 @@ export default function SignUp() {
       </Container>
     </ThemeProvider>
   );
-}
+};

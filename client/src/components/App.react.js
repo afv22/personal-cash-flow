@@ -1,11 +1,10 @@
 import React, { useContext, useEffect } from "react";
-import LoginPage from "./auth/Login.react";
-import SignupPage from "./auth/Signup.react";
 import { AUTH_TOKEN } from "../constants";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppPage from "./AppPage.react";
+import AppletPage from "./applet/AppletPage.react";
 import AuthContext from "./auth/AuthContext";
-import { TokenContext } from "./Apollo.react";
+import { TokenContext } from "./ApolloWrapper.react";
+import CashFlowApp from "./cashflow/CashFlowApp.react";
 
 export default () => {
   const { token, setToken } = useContext(TokenContext);
@@ -15,6 +14,7 @@ export default () => {
     setToken(newToken);
   };
 
+  // TODO: Make this not shitty
   const isAuth = token && token !== "null" && token !== "";
 
   const logout = () => {
@@ -23,7 +23,6 @@ export default () => {
 
   useEffect(() => {
     const newToken = localStorage.getItem(AUTH_TOKEN);
-    console.log(newToken);
     setToken(newToken);
   }, []);
 
@@ -31,9 +30,7 @@ export default () => {
     <AuthContext.Provider value={{ isAuth, logout, updateToken }}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<SignupPage />} />
+          <Route path="/" element={<AppletPage applet={<CashFlowApp />} />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

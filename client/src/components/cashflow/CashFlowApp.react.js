@@ -1,10 +1,10 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext } from "react";
 import SankeyDiagram from "./diagram/SankeyDiagram.react";
 import AccountList from "./account_list/AccountList.react";
 import { gql, useQuery } from "@apollo/client";
 import { Grid, Typography } from "@mui/material";
 import EdgeList from "./edge_list/EdgeList.react";
-import { AuthContext } from "components/App.react";
+import Loading from "components/applet/Loading.react";
 
 const GET_DATA = gql`
   query GetData {
@@ -31,11 +31,10 @@ const GET_DATA = gql`
 const DataQueryContext = createContext();
 
 export default () => {
-  const auth = useContext(AuthContext);
   const { loading, error, data } = useQuery(GET_DATA);
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   } else if (error) {
     return <p>Error!</p>;
   }

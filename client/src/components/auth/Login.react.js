@@ -1,11 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -13,7 +10,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { gql, useMutation } from "@apollo/client";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "./AuthContext";
 
 const LOGIN = gql`
@@ -26,9 +22,8 @@ const LOGIN = gql`
 
 const theme = createTheme();
 
-export default () => {
-  const navigate = useNavigate();
-  const { isAuth, updateToken } = useContext(AuthContext);
+export default ({ toggleForm }) => {
+  const { updateToken } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
@@ -49,10 +44,6 @@ export default () => {
     }
     updateToken(response.data.tokenAuth.token);
   };
-
-  if (isAuth) {
-    navigate("/");
-  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -100,10 +91,6 @@ export default () => {
               autoComplete="current-password"
               onChange={(event) => setPassword(event.target.value)}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
             <Button
               type="submit"
               fullWidth
@@ -112,16 +99,11 @@ export default () => {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/register" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Button onClick={toggleForm} style={{ textTransform: "none" }}>
+                  Don't have an account? Sign Up
+                </Button>
               </Grid>
             </Grid>
           </Box>
