@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Delete } from "@mui/icons-material";
 import { gql, useMutation } from "@apollo/client";
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { DataQueryContext } from "../CashFlowApp.react";
+import { GET_DATA } from "../CashFlow.react";
 
 const DELETE_EDGE = gql`
   mutation DeleteEdge($id: ID!) {
@@ -13,9 +13,8 @@ const DELETE_EDGE = gql`
 `;
 
 export default ({ params }) => {
-  const refreshData = useContext(DataQueryContext);
   const [deleteEdge, _] = useMutation(DELETE_EDGE, {
-    refetchQueries: [{ query: refreshData }, "GetData"],
+    refetchQueries: [{ query: GET_DATA }, "GetData"],
   });
 
   const onClick = () => {

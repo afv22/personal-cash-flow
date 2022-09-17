@@ -30,7 +30,7 @@ const GET_DATA = gql`
 
 const DataQueryContext = createContext();
 
-export default () => {
+const CashFlow = () => {
   const { loading, error, data } = useQuery(GET_DATA);
 
   if (loading) {
@@ -63,4 +63,6 @@ export default () => {
   );
 };
 
-export { DataQueryContext };
+export default CashFlow;
+
+export { GET_DATA };

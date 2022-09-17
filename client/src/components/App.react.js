@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { AUTH_TOKEN } from "../constants";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppletPage from "./applet/AppletPage.react";
+import AppletPage from "./applets/AppletPage.react";
 import AuthContext from "./auth/AuthContext";
 import { TokenContext } from "./ApolloWrapper.react";
-import CashFlowApp from "./cashflow/CashFlowApp.react";
+import CashFlow from "./cashflow/CashFlow.react";
 
-export default () => {
+const App = () => {
   const { token, setToken } = useContext(TokenContext);
 
   const updateToken = (newToken) => {
@@ -30,11 +30,16 @@ export default () => {
     <AuthContext.Provider value={{ isAuth, logout, updateToken }}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AppletPage applet={<CashFlowApp />} />} />
+          <Route
+            path="/"
+            element={<AppletPage applet={<CashFlow />} title="Cash Flow" />}
+          />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
   );
 };
+
+export default App;
 
 export { AuthContext };

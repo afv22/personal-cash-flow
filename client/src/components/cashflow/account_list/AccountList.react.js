@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import AccountModal from "./AccountModal.react";
 import { gql, useMutation } from "@apollo/client";
 import { getRows, getColumns } from "./utils/processNodes";
 import { processRowUpdate, onProcessRowUpdateError } from "./utils/rowUpdate";
 import DataList from "../DataList.react";
-import { DataQueryContext } from "components/cashflow/CashFlowApp.react";
+import { GET_DATA } from "components/cashflow/CashFlow.react";
 
 const UPDATE_NODE = gql`
   mutation UpdateNode($id: ID!, $name: String!, $initialValue: Float!) {
@@ -19,9 +19,8 @@ const UPDATE_NODE = gql`
 `;
 
 export default ({ nodes }) => {
-  const refreshData = useContext(DataQueryContext);
   const [updateNode, _] = useMutation(UPDATE_NODE, {
-    refetchQueries: [{ query: refreshData }, "GetData"],
+    refetchQueries: [{ query: GET_DATA }, "GetData"],
   });
   return (
     <DataList

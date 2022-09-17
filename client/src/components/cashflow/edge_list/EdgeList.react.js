@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import EdgeModal from "./EdgeModal.react";
 import { getColumns, getRows } from "./utils/processEdges";
 import { processRowUpdate, onProcessRowUpdateError } from "./utils/rowUpdate";
 import DataList from "../DataList.react";
-import { DataQueryContext } from "../CashFlowApp.react";
+import { GET_DATA } from "../CashFlow.react";
 
 const UPDATE_EDGE = gql`
   mutation UpdateEdge(
@@ -37,9 +37,8 @@ const UPDATE_EDGE = gql`
 `;
 
 export default ({ data }) => {
-  const refreshData = useContext(DataQueryContext);
   const [updateEdge, _] = useMutation(UPDATE_EDGE, {
-    refetchQueries: [{ query: refreshData }, "GetData"],
+    refetchQueries: [{ query: GET_DATA }, "GetData"],
   });
 
   return (
