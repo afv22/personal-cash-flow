@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { AuthContext } from "./App.react";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 
 const FETCH_USER_DATA = gql`
@@ -19,7 +19,7 @@ const SideMenu = ({ toggleDrawer }) => {
   const auth = useContext(AuthContext);
   const { loading, error, data } = useQuery(FETCH_USER_DATA);
 
-  const loggedOutData = (
+  const loggedOutMenu = (
     <Box
       sx={{ width: 250, textAlign: "center" }}
       role="presentation"
@@ -48,7 +48,7 @@ const SideMenu = ({ toggleDrawer }) => {
   );
 
   if (!auth.isAuth || loading || error) {
-    return loggedOutData;
+    return loggedOutMenu;
   }
 
   return (

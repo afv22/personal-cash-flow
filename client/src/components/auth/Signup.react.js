@@ -16,12 +16,16 @@ import { gql, useMutation } from "@apollo/client";
 
 const REGISTER_USER = gql`
   mutation REGISTER_USER(
+    $firstName: String!
+    $lastName: String!
     $email: String!
     $username: String!
     $password1: String!
     $password2: String!
   ) {
     register(
+      firstName: $firstName
+      lastName: $lastName
       email: $email
       username: $username
       password1: $password1
@@ -41,11 +45,13 @@ export default function SignUp() {
   const [registerUser, _] = useMutation(REGISTER_USER);
 
   const [firstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
+
+  const fields = [firstName, lastName, username, email, password1, password2];
 
   const [passwordsMismatch, setPasswordsMismatch] = useState(false);
   const [submitDisabled, setSubmitDisabled] = useState(false);
@@ -54,6 +60,8 @@ export default function SignUp() {
     event.preventDefault();
     const response = await registerUser({
       variables: {
+        firstName: firstName,
+        lastName: lastName,
         email: email,
         username: username,
         password1: password1,
@@ -61,24 +69,24 @@ export default function SignUp() {
       },
     });
 
+    console.log(fields);
+    console.log(response);
+
     if (response.error) {
       console.log(response.error);
       return;
     }
-
-    setUsername("");
-    setEmail("");
-    setPassword1("");
-    setPassword2("");
 
     navigate("/login");
   };
 
   useEffect(() => {
     setSubmitDisabled(
-      [username, email, password1, password2].includes("") || passwordsMismatch
+      [firstName, lastName, username, email, password1, password2].includes(
+        ""
+      ) || passwordsMismatch
     );
-  }, [username, email, password1, password2, passwordsMismatch]);
+  }, [firstName, lastName, username, email, password1, password2]);
 
   if (isAuth.isAuth) {
     navigate("/");
@@ -176,8 +184,8 @@ export default function SignUp() {
                   focused={passwordsMismatch}
                   name="password2"
                   label="Re-enter Password"
-                  type="password2"
-                  id="password"
+                  type="password"
+                  id="password2"
                   autoComplete="new-password"
                   color={passwordsMismatch ? "error" : "info"}
                   onChange={(event) => {

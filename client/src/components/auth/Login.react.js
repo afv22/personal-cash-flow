@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -28,7 +28,7 @@ const theme = createTheme();
 
 export default () => {
   const navigate = useNavigate();
-  const auth = useContext(AuthContext);
+  const { isAuth, updateToken } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [login, _] = useMutation(LOGIN);
@@ -45,11 +45,12 @@ export default () => {
       });
     } catch (error) {
       console.error(error);
+      return;
     }
-    auth.setToken(response.data.tokenAuth.token);
+    updateToken(response.data.tokenAuth.token);
   };
 
-  if (auth.isAuth) {
+  if (isAuth) {
     navigate("/");
   }
 

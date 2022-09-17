@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 import { GRAPHQL_ENDPOINT_URL } from "../constants";
 import { setContext } from "@apollo/client/link/context";
 import {
@@ -7,7 +7,6 @@ import {
   createHttpLink,
   InMemoryCache,
 } from "@apollo/client";
-import { AUTH_TOKEN } from "../constants";
 
 const TokenContext = createContext();
 
@@ -32,16 +31,11 @@ const createApolloClient = (token) => {
 };
 
 export default ({ children }) => {
-  const [token, setNewToken] = useState(null);
+  const [token, setToken] = useState(null);
   const client = createApolloClient(token);
-
-  useEffect(() => {
-    setNewToken(localStorage.getItem(AUTH_TOKEN));
-  }, []);
-
   return (
     <ApolloProvider client={client}>
-      <TokenContext.Provider value={{ token, setNewToken }}>
+      <TokenContext.Provider value={{ token, setToken }}>
         {children}
       </TokenContext.Provider>
     </ApolloProvider>

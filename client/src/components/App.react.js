@@ -1,48 +1,34 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import LoginPage from "./auth/Login.react";
 import SignupPage from "./auth/Signup.react";
 import { AUTH_TOKEN } from "../constants";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppPage from "./AppPage.react";
 import AuthContext from "./auth/AuthContext";
-import { gql, useMutation } from "@apollo/client";
 import { TokenContext } from "./Apollo.react";
 
-const VERIFY_TOKEN = gql`
-  mutation VerifyToken($token: String!) {
-    verifyToken(token: $token) {
-      payload
-    }
-  }
-`;
-
 export default () => {
-  const { token, setNewToken } = useContext(TokenContext);
-  const [isAuth, setIsAuth] = useState(false);
-  const [verifyToken, { data }] = useMutation(VERIFY_TOKEN);
+  const { token, setToken } = useContext(TokenContext);
 
-  const setToken = (newToken) => {
+  const updateToken = (newToken) => {
     localStorage.setItem(AUTH_TOKEN, newToken);
-    setNewToken(newToken);
+    setToken(newToken);
   };
+
+  const isAuth = token && token !== "null" && token !== "";
 
   const logout = () => {
-    setToken(null);
+    updateToken(null);
   };
 
   useEffect(() => {
-    if (token == null) {
-      return;
-    }
-    verifyToken({ variables: { token: token } });
-  }, [token, verifyToken]);
-
-  useEffect(() => {
-    setIsAuth(data !== undefined);
-  }, [data]);
+    const newToken = localStorage.getItem(AUTH_TOKEN);
+    console.log(newToken);
+    setToken(newToken);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuth, logout, setToken }}>
+    <AuthContext.Provider value={{ isAuth, logout, updateToken }}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<AppPage />} />
