@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { AUTH_TOKEN } from "../constants";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AppletPage from "./applets/AppletPage.react";
+import AppletPage from "./applet/AppletPage.react";
 import AuthContext from "./auth/AuthContext";
 import { TokenContext } from "./ApolloWrapper.react";
 import CashFlow from "./cashflow/CashFlow.react";

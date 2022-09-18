@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,18 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-0qjk6wlr36#@grax9+#p635p-1c@b3(znm@%7pa4_dogir_693"
+env = environ.Env()
+environ.Env.read_env()
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = env("SECRET_KEY")
 
-ALLOWED_HOSTS = []
+DEBUG = False
 
-CORS_ORIGIN_ALLOW_ALL = False
+ALLOWED_HOSTS = [".herokuapp.com"]
+
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
 # Application definition
 
@@ -79,6 +80,8 @@ TEMPLATES = [
     },
 ]
 
+# Authentication
+
 WSGI_APPLICATION = "Eden.wsgi.application"
 
 AUTH_USER_MODEL = "SpiderWeb.UserModel"
@@ -88,8 +91,53 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
+GRAPHQL_AUTH = {
+    "USERNAME_FIELD": ["username"],  # Same as USERNAME_FIELD in User model
+    "LOGIN_ALLOWED_FIELDS": ["username", "email"],
+    "USER_NODE_FILTER_FIELDS": {
+        "email": [
+            "exact",
+        ],
+        "is_active": ["exact"],
+        "status__archived": ["exact"],
+        "status__verified": ["exact"],
+        "status__secondary_email": ["exact"],
+    },
+    "REGISTER_MUTATION_FIELDS": [
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+    ],
+    "REGISTER_MUTATION_FIELDS_OPTIONAL": [],
+    "EMAIL_TEMPLATE_PASSWORD_RESET": "email/account_password_reset_email.html",
+    "EMAIL_TEMPLATE_ACTIVATION": "email/account_activation_email.html",
+    "EMAIL_SUBJECT_ACTIVATION": "email/account_activation_subject.txt",
+    "EMAIL_SUBJECT_PASSWORD_RESET": "email/account_password_reset_subject.txt",
+    "SEND_ACTIVATION_EMAIL": False,
+    "ALLOW_LOGIN_NOT_VERIFIED": False,
+    "EXPIRATION_PASSWORD_RESET_TOKEN": timedelta(hours=1),
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+    },
+]
+
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     "default": {
@@ -111,56 +159,6 @@ GRAPHQL_JWT = {
     ],
 }
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
-GRAPHQL_AUTH = {
-    "USERNAME_FIELD": ["username"],  # Same as USERNAME_FIELD in User model
-    "LOGIN_ALLOWED_FIELDS": ["username", "email"],
-    "USER_NODE_FILTER_FIELDS": {
-        "email": [
-            "exact",
-        ],
-        "is_active": ["exact"],
-        "status__archived": ["exact"],
-        "status__verified": ["exact"],
-        "status__secondary_email": ["exact"],
-    },
-    "REGISTER_MUTATION_FIELDS": [
-        "username",
-        "email",
-        "first_name",
-        "last_name",
-    ],  # extend with your fields: city, date_of_birth, company
-    "REGISTER_MUTATION_FIELDS_OPTIONAL": ["state"],
-    "EMAIL_TEMPLATE_PASSWORD_RESET": "email/account_password_reset_email.html",  # My modified template route
-    "EMAIL_TEMPLATE_ACTIVATION": "email/account_activation_email.html",  # My modified template route
-    "EMAIL_SUBJECT_ACTIVATION": "email/account_activation_subject.txt",  # My modified subject route
-    "EMAIL_SUBJECT_PASSWORD_RESET": "email/account_password_reset_subject.txt",  # My modified subject route
-    "SEND_ACTIVATION_EMAIL": False,  # A boolean parameter if you want activation or not
-    "ALLOW_LOGIN_NOT_VERIFIED": False,
-    "EXPIRATION_PASSWORD_RESET_TOKEN": timedelta(hours=1),
-}
-
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -171,7 +169,6 @@ TIME_ZONE = "EST"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

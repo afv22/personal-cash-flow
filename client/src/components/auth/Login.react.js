@@ -1,13 +1,15 @@
-import React, { useContext, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { LockOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { gql, useMutation } from "@apollo/client";
 import AuthContext from "./AuthContext";
@@ -26,6 +28,7 @@ export default ({ toggleForm }) => {
   const { updateToken } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [submitDisabled, setSubmitDisabled] = useState(true);
   const [login, _] = useMutation(LOGIN);
 
   const handleSubmit = async (event) => {
@@ -45,6 +48,10 @@ export default ({ toggleForm }) => {
     updateToken(response.data.tokenAuth.token);
   };
 
+  useEffect(() => {
+    setSubmitDisabled([username, password].includes(""));
+  }, [username, password]);
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -58,7 +65,7 @@ export default ({ toggleForm }) => {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -92,6 +99,7 @@ export default ({ toggleForm }) => {
               onChange={(event) => setPassword(event.target.value)}
             />
             <Button
+              disabled={submitDisabled}
               type="submit"
               fullWidth
               variant="contained"
