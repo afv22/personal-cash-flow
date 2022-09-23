@@ -1,12 +1,14 @@
 import React, { useContext } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { AuthContext } from "../App.react";
+import AuthContext from "components/auth/AuthContext";
 import { gql, useQuery } from "@apollo/client";
 import { BeatLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 const FETCH_USER_DATA = gql`
   query FetchUserData {
     whoami {
+      username
       firstName
       lastName
       state
@@ -15,8 +17,28 @@ const FETCH_USER_DATA = gql`
 `;
 
 const SideMenu = ({ closeDrawer }) => {
-  const auth = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const { loading, data } = useQuery(FETCH_USER_DATA);
+  const navigate = useNavigate();
+
+  const MenuButton = ({ buttonType, title, onClick }) => (
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      sx={{ width: "100%", paddingTop: 3 }}
+    >
+      <Button
+        variant={buttonType}
+        sx={{
+          width: "80%",
+        }}
+        onClick={onClick}
+      >
+        {title}
+      </Button>
+    </Box>
+  );
 
   return (
     <Box
@@ -34,7 +56,7 @@ const SideMenu = ({ closeDrawer }) => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ width: "100%", marginTop: 3, marginBottom: 3 }}
+            sx={{ width: "100%", marginTop: 3 }}
           >
             <Typography
               variant="h5"
@@ -45,21 +67,26 @@ const SideMenu = ({ closeDrawer }) => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            sx={{ width: "100%", paddingTop: 3 }}
+            sx={{ width: "100%", marginBottom: 3 }}
           >
-            <Button
-              variant="contained"
-              sx={{
-                width: "80%",
-              }}
-              onClick={() => {
-                closeDrawer();
-                auth.logout();
-              }}
-            >
-              Sign Out
-            </Button>
+            <Typography
+              variant="subtitle1"
+              sx={{ width: "80%" }}
+            >{`@${data.whoami.username}`}</Typography>
           </Box>
+          <MenuButton
+            buttonType="outlined"
+            title="View Account"
+            onClick={() => navigate("profile")}
+          />
+          <MenuButton
+            buttonType="contained"
+            title="Sign Out"
+            onClick={() => {
+              closeDrawer();
+              logout();
+            }}
+          />
         </React.Fragment>
       )}
     </Box>

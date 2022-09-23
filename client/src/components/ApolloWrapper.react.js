@@ -30,7 +30,7 @@ const createApolloClient = (token) => {
   });
 };
 
-export default ({ children }) => {
+const ApolloWrapper = ({ children }) => {
   const [token, setToken] = useState(null);
   const client = createApolloClient(token);
   return (
@@ -41,5 +41,7 @@ export default ({ children }) => {
     </ApolloProvider>
   );
 };
+
+export default ApolloWrapper;
 
 export { TokenContext };

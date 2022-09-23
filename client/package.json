@@ -2,7 +2,7 @@
   "name": "personal-cash-flow",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://afv22.github.io/personal-cash-flow",
+  "homepage": "https://afv22.github.io/personal-finance-client",
   "dependencies": {
     "@apollo/client": "^3.6.9",
     "@emotion/react": "^11.10.0",

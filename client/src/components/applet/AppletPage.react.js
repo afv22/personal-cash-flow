@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Button, Drawer } from "@mui/material";
+import { IconButton, Drawer } from "@mui/material";
 import { Menu } from "@mui/icons-material";
 import SideMenu from "./SideMenu.react";
 import AuthWrapper from "../auth/AuthWrapper.react";
+
+const style = {
+  menuButton: {
+    margin: 0,
+    bottom: "auto",
+    left: 20,
+    top: 20,
+    right: "auto",
+    position: "fixed",
+  },
+};
 
 export default ({ applet, title }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,9 +24,13 @@ export default ({ applet, title }) => {
 
   return (
     <AuthWrapper>
-      <Button onClick={() => setIsOpen(true)}>
+      <IconButton
+        onClick={() => setIsOpen(true)}
+        size="large"
+        style={style.menuButton}
+      >
         <Menu />
-      </Button>
+      </IconButton>
       <Drawer anchor="left" open={isOpen} onClose={() => setIsOpen(false)}>
         <SideMenu closeDrawer={() => setIsOpen(false)} />
       </Drawer>
